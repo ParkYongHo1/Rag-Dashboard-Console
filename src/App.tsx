@@ -1,19 +1,20 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { apiService } from "./services/api";
+import { QUERY_KEYS } from "./constants/queryKeys";
 
 function App() {
-  const [message, setMessage] = useState("");
-  useEffect(() => {
-    const loadTestApi = async () => {
-      try {
-        const response = await axios.get("/api/test");
-        setMessage(response.data.message);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    loadTestApi();
-  }, []);
+  const {
+    data: message,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: QUERY_KEYS.TEST,
+    queryFn: apiService.fetchTest,
+    select: (data) => data.message,
+  });
+
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Error occurred</div>;
 
   return <div>{message}</div>;
 }
