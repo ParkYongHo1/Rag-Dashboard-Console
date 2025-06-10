@@ -8,31 +8,30 @@ export const handlers = [
     });
   }),
 
-  http.get("/api/dashboards", () => {
+  http.get("/api/dashboards", ({ request }) => {
+    const url = new URL(request.url);
+    const page = Number(url.searchParams.get("page")) || 1;
+    const size = Number(url.searchParams.get("size")) || 10;
+
+    const allDashboards = Array.from({ length: 20 }, (_, i) => ({
+      id: `dashboard-${i + 1}`,
+      dashboardName: `대시보드 ${i + 1}`,
+      dashboardDescription: `대시보드 ${i + 1} 설명입니다.`,
+      createdAt: "2025-06-01",
+      updatedAt: "2025-06-10",
+      status: i % 2 === 0 ? "CREATED" : "COMPLETED",
+    }));
+
+    const start = (page - 1) * size;
+    const pagedDashboards = allDashboards.slice(start, start + size);
+
     return HttpResponse.json({
       success: true,
       data: {
-        total: 2,
-        page: 1,
-        size: 10,
-        dashboards: [
-          {
-            id: "test123",
-            dashboardName: "대시보드 이름",
-            dashboardDescription: "대시보드 설명",
-            createdAt: "2025-06-09",
-            updatedAt: "-",
-            status: "CREATED",
-          },
-          {
-            id: "test124",
-            dashboardName: "주간 리포트",
-            dashboardDescription: "주간 리포트용 대시보드입니다.",
-            createdAt: "2025-06-01",
-            updatedAt: "2025-06-08",
-            status: "COMPLETED",
-          },
-        ],
+        total: allDashboards.length,
+        page,
+        size,
+        dashboards: pagedDashboards,
       },
     });
   }),

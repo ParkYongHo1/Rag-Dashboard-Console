@@ -16,6 +16,7 @@ const DashboardList = () => {
   const { data, isLoading, error } = useQuery({
     queryKey: QUERY_KEYS.DASHBOARD.LIST({ page, size }),
     queryFn: () => dashboardService.getList({ page, size }),
+    placeholderData: (previousData) => previousData,
   });
 
   if (isLoading) return <p className="p-4">로딩 중...</p>;
