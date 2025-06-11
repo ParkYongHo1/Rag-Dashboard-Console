@@ -1,11 +1,22 @@
 import edit from "@/assets/dashboard-list/edit.svg";
+import init from "@/assets/dashboard-list/init.svg";
+import { LinkButton } from "@/shared/ui/LinkButton";
 import { DashboardItem } from "@/types/dashboard-list";
 
 interface DashboardListItemProps {
   item: DashboardItem;
+  mode: "dashboardList" | "statList";
 }
 
-const DashboardListItem: React.FC<DashboardListItemProps> = ({ item }) => {
+const DashboardListItem: React.FC<DashboardListItemProps> = ({
+  item,
+  mode,
+}) => {
+  const PATH =
+    mode === "dashboardList"
+      ? `/edit-dashboard/${item.id}`
+      : `/stats/${item.id}`;
+
   return (
     <>
       <tr>
@@ -30,7 +41,13 @@ const DashboardListItem: React.FC<DashboardListItemProps> = ({ item }) => {
         </th>
         <td className="border border-gray-300 px-4 py-2 cursor-pointer">
           <div className="flex justify-center">
-            <img src={edit} className="text-center w-[30px]" />
+            <LinkButton path={PATH} type="icon">
+              <img
+                src={mode === "dashboardList" ? edit : init}
+                alt={mode === "dashboardList" ? "수정 아이콘" : "입장 아이콘"}
+                className="cursor-pointer w-[30px] h-[30px]"
+              />
+            </LinkButton>
           </div>
         </td>
       </tr>

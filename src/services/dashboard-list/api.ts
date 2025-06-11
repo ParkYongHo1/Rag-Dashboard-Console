@@ -10,4 +10,14 @@ export const dashboardService = {
     );
     return response.data.data;
   },
+  createDashboard: async (params: {
+    dashboardName: string;
+    databaseName: string;
+    dashboardDescription?: string;
+  }) => {
+    console.log(params);
+
+    const response = await axios.post<BaseResponse>("/api/dashboards", params);
+    return response.data.success;
+  },
 };

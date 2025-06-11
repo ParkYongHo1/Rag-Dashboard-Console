@@ -30,6 +30,7 @@
       "@pages/*": ["./pages/*"],
       "@services/*": ["./services/*"],
       "@types/*": ["./types/*"],
+      "@widgets/*": ["./widgets/*"],
       "@/*": ["./*"]
     }
   },

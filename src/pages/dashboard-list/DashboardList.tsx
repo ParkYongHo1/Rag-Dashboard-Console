@@ -65,7 +65,7 @@ const DashboardList = () => {
                 </thead>
                 <tbody>
                   {data.dashboards.map((item) => (
-                    <DashboardListItem key={item.id} item={item} />
+                    <DashboardListItem key={item.id} item={item} mode="dashboardList"/>
                   ))}
                 </tbody>
               </table>

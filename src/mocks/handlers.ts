@@ -1,5 +1,7 @@
 import { http, HttpResponse } from "msw";
 
+const existingDatabaseKEY = new Set<string>(["대시보드 1", "대시보드 2"]);
+
 export const handlers = [
   http.get("/api/test", () => {
     return HttpResponse.json({
@@ -33,6 +35,34 @@ export const handlers = [
         size,
         dashboards: pagedDashboards,
       },
+    });
+  }),
+  http.post("/api/dashboards", async ({ request }) => {
+    const { databaseName } = (await request.json()) as {
+      dashboardName: string;
+      databaseName: string;
+      dashboardDescription?: string;
+    };
+
+    if (!databaseName || databaseName.trim() === "") {
+      return HttpResponse.json({
+        success: false,
+        message: "DATABASE KEY는 필수입니다.",
+      });
+    }
+
+    if (existingDatabaseKEY.has(databaseName)) {
+      return HttpResponse.json({
+        success: false,
+        message: "이미 존재하는 대시보드입니다.",
+      });
+    }
+
+    existingDatabaseKEY.add(databaseName);
+
+    return HttpResponse.json({
+      success: true,
+      message: "대시보드가 성공적으로 생성되었습니다.",
     });
   }),
 ];

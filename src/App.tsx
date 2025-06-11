@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { ReactNode } from "react";
 import Header from "@/components/Header/Header";
 import DashboardList from "@/pages/dashboard-list/DashboardList";
+import DashboardInfo from "./pages/dashboard-info/DashboardInfo";
 
 interface LayoutWrapperProps {
   children: ReactNode;
@@ -13,7 +14,10 @@ function App() {
       <LayoutWrapper>
         <Routes>
           <Route path="/" element={<DashboardList />} />
-          <Route path="/edit-dashboard/:id" />
+          <Route
+            path="/edit-dashboard/:dashboardId"
+            element={<DashboardInfo mode="add" />}
+          />
         </Routes>
       </LayoutWrapper>
     </Router>
