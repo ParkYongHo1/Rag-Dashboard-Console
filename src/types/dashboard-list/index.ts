@@ -1,5 +1,5 @@
 export interface DashboardItem {
-  id: string;
+  dashboardId: string;
   dashboardName: string;
   dashboardDescription: string;
   createdAt: string;

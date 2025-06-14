@@ -8,6 +8,9 @@ export const QUERY_KEYS = {
       databaseName: string;
       dashboardDescription: string;
     }) => ["DASHBOARD", "CREATE", params] as const,
+
+    READ: (dashboardId: string) => ["DASHBOARD", "READ", dashboardId] as const,
+
     DETAIL: (id: string) => ["DASHBOARD", "DETAIL", id] as const,
   },
 } as const;

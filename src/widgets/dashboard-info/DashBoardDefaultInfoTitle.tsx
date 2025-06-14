@@ -1,6 +1,6 @@
 import { DashBoardInfoProps } from "@/types/dashboard-info";
 
-const DashBoardDefaultInfoTitle = ({ mode }: DashBoardInfoProps) => {
+const DashboardDefaultInfoTitle = ({ mode }: DashBoardInfoProps) => {
   return (
     <>
       <p className="font-bold text-lg">기본 정보</p>
@@ -12,4 +12,4 @@ const DashBoardDefaultInfoTitle = ({ mode }: DashBoardInfoProps) => {
     </>
   );
 };
-export default DashBoardDefaultInfoTitle;
+export default DashboardDefaultInfoTitle;

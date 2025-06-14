@@ -1,30 +1,53 @@
 import back from "@/assets/dashboard-info/back.svg";
 import save from "@/assets/dashboard-info/save.svg";
 import { dashboardService } from "@/services/dashboard-list/api";
-import { Input } from "@/shared/ui/Input";
 import { LinkButton } from "@/shared/ui/LinkButton";
-import { DashBoardInfoForm, DashBoardInfoProps } from "@/types/dashboard-info";
-import DashBoardDefaultInfoTitle from "@/widgets/dashboard-info/DashBoardDefaultInfoTitle";
-import { useMutation } from "@tanstack/react-query";
+import {
+  DashBoardDefaultInfoForm,
+  DashBoardInfoProps,
+} from "@/types/dashboard-info";
+import DashboardDefaultInfoTitle from "@/widgets/dashboard-info/DashBoardDefaultInfoTitle";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
+import DashboardDefaultInfoForm from "./DashboardDefaultInfoForm";
+import { useEffect } from "react";
+import { QUERY_KEYS } from "@/constants/queryKeys";
 
-const ROWS: { label: string; name: keyof DashBoardInfoForm }[] = [
-  { label: "대시보드 명칭", name: "dashboardName" },
-  { label: "DATABASE KEY", name: "databaseName" },
-  { label: "대시보드 설명", name: "dashboardDescription" },
-];
-const DashBoardDefaultInfo = ({ mode }: DashBoardInfoProps) => {
-  const isValid = false;
+const DashboardDefaultInfo = ({ mode, dashboardId }: DashBoardInfoProps) => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
-  } = useForm<DashBoardInfoForm>();
+    formState: { errors, isValid },
+    reset,
+  } = useForm<DashBoardDefaultInfoForm>({
+    mode: "onChange",
+    defaultValues: {
+      dashboardName: "",
+      databaseKey: "",
+      dashboardDescription: "",
+    },
+  });
+  const { data: defaultValues } = useQuery({
+    queryKey: QUERY_KEYS.DASHBOARD.READ(dashboardId!),
+    queryFn: () =>
+      dashboardService.getDashboardDefaultInfo({ dashboardId: dashboardId! }),
+    enabled: mode === "edit" && Boolean(dashboardId),
+  });
+
+  useEffect(() => {
+    if (defaultValues?.dashboardDefaultInfo) {
+      const info = defaultValues.dashboardDefaultInfo;
+      reset({
+        dashboardName: info.dashboardName,
+        databaseKey: info.databaseKey,
+        dashboardDescription: info.dashboardDescription || "",
+      });
+    }
+  }, [defaultValues, reset]);
+
   const { mutate } = useMutation({
     mutationFn: dashboardService.createDashboard,
     onSuccess: (response) => {
-      console.log(response);
-
       if (response === true) {
         alert("대시보드가 생성되었습니다.");
       } else {
@@ -36,7 +59,7 @@ const DashBoardDefaultInfo = ({ mode }: DashBoardInfoProps) => {
       console.error(error);
     },
   });
-  const onSubmit = async (data: DashBoardInfoForm) => {
+  const onSubmit = async (data: DashBoardDefaultInfoForm) => {
     mutate(data);
   };
   return (
@@ -62,58 +85,16 @@ const DashBoardDefaultInfo = ({ mode }: DashBoardInfoProps) => {
           </button>
         </div>
       </div>
-      <DashBoardDefaultInfoTitle mode={mode} />
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <table className="w-full border-collapse mt-4 table-fixed">
-          <thead>
-            <tr className="bg-gray-50">
-              <th className="border border-gray-300 px-4 py-3 font-bold text-center text-gray-600">
-                항목 이름
-              </th>
-              <th className="border border-gray-300 px-4 py-3 font-bold text-center text-gray-600">
-                입력 값
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {ROWS.map(({ label, name }) => (
-              <tr key={name}>
-                <td className="border border-gray-300 px-4 py-4 font-bold text-gray-600">
-                  <span className="text-red-500">*&nbsp;</span>
-                  {label}
-                </td>
-                <td className="border border-gray-300 px-4 py-4">
-                  <Input
-                    register={register(name, {
-                      required:
-                        name === "dashboardDescription"
-                          ? false
-                          : `${label}은(는) 필수 입력입니다.`,
-                    })}
-                    error={errors[name]}
-                    placeholder={`${label}을(를) 입력해주세요`}
-                  />
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        <div className="flex justify-between my-4 items-center">
-          <p className="text-red-500 text-sm mr-4"></p>
-          {!isValid && (
-            <button
-              type="submit"
-              className="h-[36px] text-white bg-blue-500 shadow-md px-3 py-1.5 rounded-[5px] font-semibold cursor-pointer text-sm hover:bg-blue-600 transition duration-200"
-            >
-              <div className="w-[60px]">
-                <p>조회하기</p>
-              </div>
-            </button>
-          )}
-        </div>
-      </form>
+      <DashboardDefaultInfoTitle mode={mode} />
+      <DashboardDefaultInfoForm
+        mode={mode}
+        register={register}
+        errors={errors}
+        isValid={isValid}
+        onSubmit={handleSubmit(onSubmit)}
+      />
     </>
   );
 };
 
-export default DashBoardDefaultInfo;
+export default DashboardDefaultInfo;

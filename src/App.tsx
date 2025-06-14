@@ -15,8 +15,12 @@ function App() {
         <Routes>
           <Route path="/" element={<DashboardList />} />
           <Route
-            path="/edit-dashboard/:dashboardId"
+            path="/add-dashboard/"
             element={<DashboardInfo mode="add" />}
+          />
+          <Route
+            path="/edit-dashboard/:dashboardId"
+            element={<DashboardInfo mode="edit" />}
           />
         </Routes>
       </LayoutWrapper>
