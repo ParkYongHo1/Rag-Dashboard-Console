@@ -1,5 +1,5 @@
-import DashboardDefaultInfo from "@/components/dashboard-info/DashboardDefaultInfo.tsx";
-import DashboardDetailInfo from "@/components/dashboard-info/DashboardDetailInfo.tsx";
+import DashboardDefaultInfo from "@/components/dashboard-info/DashboardDefaultInfo";
+import DashboardDetailInfo from "@/components/dashboard-info/DashboardDetailInfo";
 import { DashBoardInfoProps } from "@/types/dashboard-info";
 import { useParams } from "react-router-dom";
 
