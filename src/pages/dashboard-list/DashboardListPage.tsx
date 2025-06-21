@@ -8,7 +8,7 @@ import DashboardTooltip from "@/components/dashboard-list/DashboardTooltip";
 
 import Pagination from "@/components/dashboard-list/Pagination";
 
-const DashboardList = () => {
+const DashboardListPage = () => {
   const [tooltipVisible, setTooltipVisible] = useState(false);
   const [page, setPage] = useState(1);
   const size = 10;
@@ -86,4 +86,4 @@ const DashboardList = () => {
   );
 };
 
-export default DashboardList;
+export default DashboardListPage;

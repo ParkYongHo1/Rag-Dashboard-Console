@@ -1,9 +1,10 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { ReactNode } from "react";
 import Header from "@/components/Header/Header";
-import DashboardList from "@/pages/dashboard-list/DashboardList";
-import DashboardInfo from "./pages/dashboard-info/DashboardInfo";
+import DashboardListPage from "@/pages/dashboard-list/DashboardListPage";
+import DashboardInfoPage from "./pages/dashboard-info/DashboardInfoPage";
 import Footer from "@/components/Footer/Footer";
+import LoginPage from "@/pages/login/LoginPage";
 
 interface LayoutWrapperProps {
   children: ReactNode;
@@ -14,14 +15,15 @@ function App() {
     <Router>
       <LayoutWrapper>
         <Routes>
-          <Route path="/" element={<DashboardList />} />
+          <Route path="/" element={<DashboardListPage />} />
+          <Route path="/login" element={<LoginPage />} />
           <Route
             path="/add-dashboard/"
-            element={<DashboardInfo mode="add" />}
+            element={<DashboardInfoPage mode="add" />}
           />
           <Route
             path="/edit-dashboard/:dashboardId"
-            element={<DashboardInfo mode="edit" />}
+            element={<DashboardInfoPage mode="edit" />}
           />
         </Routes>
       </LayoutWrapper>
