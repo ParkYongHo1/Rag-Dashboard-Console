@@ -16,9 +16,19 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     "forceConsistentCasingInFileNames": true,
-    "baseUrl": ".",
+    "baseUrl": "./src",
     "paths": {
-      "@/*": ["./src/*"]
+      "@components/*": ["./components/*"],
+      "@constants/*": ["./constants/*"],
+      "@hooks/*": ["./hooks/*"],
+      "@mocks/*": ["./mocks/*"],
+      "@pages/*": ["./pages/*"],
+      "@services/*": ["./services/*"],
+      "@types/*": ["./types/*"],
+      "@widgets/*": ["./widgets/*"],
+      "@assets/*": ["./assets/*"],
+      "@stores/*": ["./stores/*"],
+      "@/*": ["./*"]
     }
   },
   "include": ["src"],

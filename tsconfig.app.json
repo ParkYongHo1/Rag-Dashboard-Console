@@ -31,6 +31,8 @@
       "@services/*": ["./services/*"],
       "@types/*": ["./types/*"],
       "@widgets/*": ["./widgets/*"],
+      "@assets/*": ["./assets/*"],
+      "@stores/*": ["./stores/*"],
       "@/*": ["./*"]
     }
   },
