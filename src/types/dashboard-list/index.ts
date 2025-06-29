@@ -1,15 +1,16 @@
 export interface DashboardItem {
   dashboardId: string;
+  companyNum: number;
   dashboardName: string;
   dashboardDescription: string;
   createdAt: string;
   updatedAt: string;
-  status: "CREATED" | "COMPLETED";
+  dashboardStatus: "CREATED" | "COMPLETED";
 }
 
 export interface DashboardListResponse {
-  total: number;
-  page: number;
-  size: number;
-  dashboards: DashboardItem[];
+  totalPages: number;
+  totalCount: number;
+  currentPage: number;
+  dashboardList: DashboardItem[];
 }

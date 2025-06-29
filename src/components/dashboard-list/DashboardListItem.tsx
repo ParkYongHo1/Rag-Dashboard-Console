@@ -34,10 +34,12 @@ const DashboardListItem: React.FC<DashboardListItemProps> = ({
         </td>
         <th
           className={`border border-gray-300 px-4 py-2 text-center ${
-            item.status === "COMPLETED" ? "text-green-500" : "text-red-500"
+            item.dashboardStatus === "COMPLETED"
+              ? "text-green-500"
+              : "text-red-500"
           }`}
         >
-          {item.status}
+          {item.dashboardStatus}
         </th>
         <td className="border border-gray-300 px-4 py-2 cursor-pointer">
           <div className="flex justify-center">

@@ -5,20 +5,23 @@ export interface DashBoardInfoProps {
 
 export interface DashBoardDefaultInfoForm {
   dashboardName: string;
-  databaseKey: string;
+  databaseName: string;
   dashboardDescription?: string;
 }
 export interface DashboardDefaultInfoItem {
   dashboardDefaultInfo: {
     dashboardName: string;
-    databaseKey: string;
+    databaseName: string;
     dashboardDescription?: string;
   };
 }
 export interface DashboardDefaultInfoResponse {
   dashboardDefaultInfo: {
     dashboardName: string;
-    databaseKey: string;
+    databaseName: string;
     dashboardDescription?: string;
   };
+}
+export interface CreateDashboardResponse {
+  dashboardId: string;
 }

@@ -1,5 +1,6 @@
 export interface LoginResponse {
-  acceessToken: string;
+  accessToken: string;
+  accessTokenExpiresAt: number;
   tableNamesList: [];
   company: string;
   message: string;

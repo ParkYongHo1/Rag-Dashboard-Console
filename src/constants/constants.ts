@@ -5,6 +5,6 @@ export const DSAHBOARDDEFAULTINFO: {
   name: keyof DashBoardDefaultInfoForm;
 }[] = [
   { label: "대시보드 명칭", name: "dashboardName" },
-  { label: "DATABASE KEY", name: "databaseKey" },
+  { label: "DATABASE Name", name: "databaseName" },
   { label: "대시보드 설명", name: "dashboardDescription" },
 ];

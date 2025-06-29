@@ -2,9 +2,9 @@ import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
-import { loginService } from "@/services/login/api";
 import { useCompanyStore } from "@/stores/companyStore";
 import axios from "axios";
+import { authService } from "@/services/auth/api";
 
 interface FormData {
   companyId: string;
@@ -31,7 +31,7 @@ const LoginPage = () => {
   const idValue = watch("companyId");
 
   const { mutate, isPending } = useMutation({
-    mutationFn: loginService.login,
+    mutationFn: authService.login,
     onSuccess: (response) => {
       const companyInfo = {
         company: response.company,
@@ -39,11 +39,13 @@ const LoginPage = () => {
       };
 
       const tokens = {
-        accessToken: response.acceessToken,
+        accessToken: response.accessToken,
         refreshToken: response.refreshToken,
+        accessTokenExpiresAt: response.accessTokenExpiresAt,
       };
 
       login(companyInfo, tokens);
+      console.log(response);
 
       alert(response.message || "로그인에 성공했습니다.");
 

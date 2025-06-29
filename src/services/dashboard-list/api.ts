@@ -1,25 +1,34 @@
 import axios from "axios";
-import { BaseResponse } from "@/types/common";
 import { DashboardListResponse } from "../../types/dashboard-list";
-import { DashboardDefaultInfoResponse } from "@/types/dashboard-info";
+import {
+  CreateDashboardResponse,
+  DashboardDefaultInfoResponse,
+} from "@/types/dashboard-info";
+import { apiClient } from "@/lib/interceptors";
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 export const dashboardService = {
   getList: async (params: { page: number; size: number }) => {
-    const response = await axios.get<BaseResponse<DashboardListResponse>>(
-      "/api/dashboards",
+    const response = await apiClient.get<DashboardListResponse>(
+      `${API_BASE_URL}/api/dashboards`,
       { params }
     );
-    return response.data.data;
+    console.log(response.data);
+
+    return response.data;
   },
   createDashboard: async (params: {
     dashboardName: string;
-    databaseKey: string;
+    databaseName: string;
     dashboardDescription?: string;
   }) => {
     console.log(params);
 
-    const response = await axios.post<BaseResponse>("/api/dashboards", params);
-    return response.data.success;
+    const response = await apiClient.post<CreateDashboardResponse>(
+      `${API_BASE_URL}/api/dashboard`,
+      params
+    );
+    return response.data;
   },
   getDashboardDefaultInfo: async (params: { dashboardId: string }) => {
     const response = await axios.get<DashboardDefaultInfoResponse>(
