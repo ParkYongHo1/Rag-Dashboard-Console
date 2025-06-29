@@ -1,4 +1,4 @@
-import noData from "@/assets/dashboard-list/nodata.svg";
+import noData from "@/assets/dashboard-list/no_data.svg";
 const NoDashboardListItem = () => {
   return (
     <>
