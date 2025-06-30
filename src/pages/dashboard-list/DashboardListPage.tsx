@@ -10,7 +10,7 @@ import DashboardList from "@/components/dashboard-list/DashboardList";
 import NoDashboardListItem from "@/components/dashboard-list/NoDashboardListItem";
 
 const DashboardListPage = () => {
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(1);
   const size = 10;
   const company = useCompanyStore((state) => state.accessToken);
   console.log(company);
