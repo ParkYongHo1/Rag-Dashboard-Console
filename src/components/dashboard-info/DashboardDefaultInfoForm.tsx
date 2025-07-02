@@ -9,6 +9,7 @@ import {
   UseFormRegister,
   UseFormSetValue,
   UseFormWatch,
+  UseFormTrigger,
 } from "react-hook-form";
 
 interface Props extends DashBoardInfoProps {
@@ -19,6 +20,7 @@ interface Props extends DashBoardInfoProps {
   tableNamesList: string[];
   setValue: UseFormSetValue<DashBoardDefaultInfoForm>;
   watch: UseFormWatch<DashBoardDefaultInfoForm>;
+  trigger: UseFormTrigger<DashBoardDefaultInfoForm>;
 }
 
 const DashboardDefaultInfoForm = ({
@@ -29,29 +31,33 @@ const DashboardDefaultInfoForm = ({
   tableNamesList,
   setValue,
   watch,
+  trigger,
 }: Props) => {
-  const selectedDatabase = watch("databaseName");
+  const selectedDatabase = watch("tableName");
 
-  const handleDatabaseChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setValue("databaseName", e.target.value);
+  const handleDatabaseChange = async (
+    e: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    setValue("tableName", e.target.value);
+    await trigger("tableName");
   };
 
   const renderInputField = (
     name: keyof DashBoardDefaultInfoForm,
     label: string
   ) => {
-    if (name === "databaseName") {
+    if (name === "tableName") {
       return (
         <select
           {...register(name, {
             required: `${label}은(는) 필수 선택입니다.`,
           })}
-          value={selectedDatabase}
+          value={selectedDatabase || ""}
           onChange={handleDatabaseChange}
           disabled={mode === "edit"}
           className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed"
         >
-          <option value="">데이터베이스를 선택해주세요</option>
+          <option value="">테이블을 선택해주세요</option>
           {tableNamesList.map((tableName) => (
             <option key={tableName} value={tableName}>
               {tableName}
@@ -69,7 +75,7 @@ const DashboardDefaultInfoForm = ({
               ? false
               : `${label}은(는) 필수 입력입니다.`,
         })}
-        error={errors[name]}
+        error={undefined}
         placeholder={`${label}을(를) 입력해주세요`}
         disabled={mode === "edit"}
       />
@@ -107,14 +113,10 @@ const DashboardDefaultInfoForm = ({
           </tbody>
         </table>
 
-        {(errors.dashboardName?.message ||
-          errors.databaseName?.message ||
-          errors.dashboardDescription?.message) && (
+        {(errors.dashboardName?.message || errors.tableName?.message) && (
           <div className="mt-4">
             <p className="text-red-500 text-sm">
-              {errors.dashboardName?.message ||
-                errors.databaseName?.message ||
-                errors.dashboardDescription?.message}
+              {errors.dashboardName?.message || errors.tableName?.message}
             </p>
           </div>
         )}

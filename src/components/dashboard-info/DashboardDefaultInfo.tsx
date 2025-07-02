@@ -13,10 +13,15 @@ import DashboardDefaultInfoForm from "./DashboardDefaultInfoForm";
 import { useEffect } from "react";
 import { QUERY_KEYS } from "@/constants/queryKeys";
 import { useCompanyStore } from "@/stores/companyStore";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 const DashboardDefaultInfo = ({ mode, dashboardId }: DashBoardInfoProps) => {
   const { company } = useCompanyStore();
   const tableNamesList = company?.tableNamesList || [];
+  const navigate = useNavigate();
+
+  const [searchParams] = useSearchParams();
+  const statusFromUrl = searchParams.get("status");
 
   const {
     register,
@@ -25,19 +30,26 @@ const DashboardDefaultInfo = ({ mode, dashboardId }: DashBoardInfoProps) => {
     reset,
     setValue,
     watch,
+    trigger,
   } = useForm<DashBoardDefaultInfoForm>({
     mode: "onChange",
     defaultValues: {
       dashboardName: "",
-      databaseName: "",
+      tableName: "",
       dashboardDescription: "",
     },
   });
 
   const { data: defaultValues } = useQuery({
-    queryKey: QUERY_KEYS.DASHBOARD.READ(dashboardId!),
+    queryKey: QUERY_KEYS.DASHBOARD.READ({
+      dashboardId: dashboardId!,
+      status: statusFromUrl ?? "",
+    }),
     queryFn: () =>
-      dashboardService.getDashboardDefaultInfo({ dashboardId: dashboardId! }),
+      dashboardService.getDashboardDefaultInfo({
+        dashboardId: dashboardId!,
+        status: statusFromUrl ?? "",
+      }),
     enabled: mode === "edit" && Boolean(dashboardId),
   });
 
@@ -46,7 +58,7 @@ const DashboardDefaultInfo = ({ mode, dashboardId }: DashBoardInfoProps) => {
       const info = defaultValues.dashboardDefaultInfo;
       reset({
         dashboardName: info.dashboardName,
-        databaseName: info.databaseName,
+        tableName: info.tableName,
         dashboardDescription: info.dashboardDescription || "",
       });
     }
@@ -54,8 +66,8 @@ const DashboardDefaultInfo = ({ mode, dashboardId }: DashBoardInfoProps) => {
 
   const { mutate, isPending } = useMutation({
     mutationFn: dashboardService.createDashboard,
-    onSuccess: (response) => {
-      console.log(response);
+    onSuccess: () => {
+      navigate("/", { replace: true });
       alert("대시보드가 생성되었습니다.");
     },
     onError: (error) => {
@@ -68,7 +80,6 @@ const DashboardDefaultInfo = ({ mode, dashboardId }: DashBoardInfoProps) => {
     mutate(data);
   };
 
-  // 저장 버튼 핸들러
   const handleSave = () => {
     handleSubmit(onSubmit)();
   };
@@ -78,6 +89,11 @@ const DashboardDefaultInfo = ({ mode, dashboardId }: DashBoardInfoProps) => {
       <div className="flex justify-between items-center mb-6">
         <div className="text-2xl">
           DASHBOARD {mode === "add" ? "생성" : "수정"}
+          {statusFromUrl && (
+            <span className="text-sm text-gray-500 ml-2">
+              ({statusFromUrl})
+            </span>
+          )}
         </div>
         <div className="flex items-center gap-[10px]">
           <LinkButton path="/" type="back">
@@ -110,6 +126,7 @@ const DashboardDefaultInfo = ({ mode, dashboardId }: DashBoardInfoProps) => {
         tableNamesList={tableNamesList}
         setValue={setValue}
         watch={watch}
+        trigger={trigger}
       />
     </>
   );

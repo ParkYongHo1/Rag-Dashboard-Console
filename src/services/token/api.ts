@@ -13,7 +13,6 @@ export const tokenService = {
       `${API_BASE_URL}/auth/reissue`,
       { refreshToken }
     );
-    console.log("리프레시 호출");
 
     return response.data;
   },

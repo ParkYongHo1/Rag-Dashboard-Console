@@ -1,4 +1,3 @@
-import axios from "axios";
 import { DashboardListResponse } from "../../types/dashboard-list";
 import {
   CreateDashboardResponse,
@@ -19,7 +18,7 @@ export const dashboardService = {
   },
   createDashboard: async (params: {
     dashboardName: string;
-    databaseName: string;
+    tableName: string;
     dashboardDescription?: string;
   }) => {
     console.log(params);
@@ -30,9 +29,12 @@ export const dashboardService = {
     );
     return response.data;
   },
-  getDashboardDefaultInfo: async (params: { dashboardId: string }) => {
-    const response = await axios.get<DashboardDefaultInfoResponse>(
-      `/api/dashboard-default-info/${params.dashboardId}`,
+  getDashboardDefaultInfo: async (params: {
+    dashboardId: string;
+    status: string;
+  }) => {
+    const response = await apiClient.get<DashboardDefaultInfoResponse>(
+      `${API_BASE_URL}/api/dashboard/${params.dashboardId}`,
       { params }
     );
 

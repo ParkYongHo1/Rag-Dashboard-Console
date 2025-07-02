@@ -5,20 +5,20 @@ export interface DashBoardInfoProps {
 
 export interface DashBoardDefaultInfoForm {
   dashboardName: string;
-  databaseName: string;
+  tableName: string;
   dashboardDescription?: string;
 }
 export interface DashboardDefaultInfoItem {
   dashboardDefaultInfo: {
     dashboardName: string;
-    databaseName: string;
+    tableName: string;
     dashboardDescription?: string;
   };
 }
 export interface DashboardDefaultInfoResponse {
   dashboardDefaultInfo: {
     dashboardName: string;
-    databaseName: string;
+    tableName: string;
     dashboardDescription?: string;
   };
 }

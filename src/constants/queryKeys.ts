@@ -9,7 +9,8 @@ export const QUERY_KEYS = {
       dashboardDescription: string;
     }) => ["DASHBOARD", "CREATE", params] as const,
 
-    READ: (dashboardId: string) => ["DASHBOARD", "READ", dashboardId] as const,
+    READ: (params: { dashboardId: string; status: string }) =>
+      ["DASHBOARD", "READ", params] as const,
 
     DETAIL: (id: string) => ["DASHBOARD", "DETAIL", id] as const,
   },

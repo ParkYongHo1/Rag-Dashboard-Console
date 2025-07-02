@@ -14,7 +14,7 @@ const DashboardListItem: React.FC<DashboardListItemProps> = ({
 }) => {
   const PATH =
     mode === "dashboardList"
-      ? `/edit-dashboard/${item.dashboardId}`
+      ? `/edit-dashboard/${item.dashboardId}?status=${item.dashboardStatus}`
       : `/stats/${item.dashboardId}`;
 
   return (
@@ -56,4 +56,5 @@ const DashboardListItem: React.FC<DashboardListItemProps> = ({
     </>
   );
 };
+
 export default DashboardListItem;

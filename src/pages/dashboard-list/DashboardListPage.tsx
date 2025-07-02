@@ -5,21 +5,19 @@ import { QUERY_KEYS } from "@/constants/queryKeys";
 import { LinkButton } from "@/shared/ui/LinkButton";
 
 import Pagination from "@/components/dashboard-list/Pagination";
-import { useCompanyStore } from "@/stores/companyStore";
 import DashboardList from "@/components/dashboard-list/DashboardList";
 import NoDashboardListItem from "@/components/dashboard-list/NoDashboardListItem";
 
 const DashboardListPage = () => {
   const [page, setPage] = useState(1);
   const size = 10;
-  const company = useCompanyStore((state) => state.accessToken);
-  console.log(company);
 
   const { data, isLoading, error } = useQuery({
     queryKey: QUERY_KEYS.DASHBOARD.LIST({ page, size }),
     queryFn: () => dashboardService.getList({ page, size }),
     placeholderData: (previousData) => previousData,
   });
+  console.log(data);
 
   if (isLoading) return <p className="p-4">로딩 중...</p>;
   if (error || !data) return <p className="p-4">에러가 발생했어요 😢</p>;
