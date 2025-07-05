@@ -13,7 +13,7 @@ export const Input = ({ register, error, ...rest }: InputProps) => {
         <input
           {...register}
           {...rest}
-          className={`w-full text-sm h-[40px] p-1 border-b ${
+          className={`w-full text-sm h-[40px] p-3 border-b  disabled:bg-gray-100 disabled:cursor-not-allowed ${
             error ? "border-red-500" : "border-gray-300 focus:border-blue-500"
           } focus:outline-none`}
         />

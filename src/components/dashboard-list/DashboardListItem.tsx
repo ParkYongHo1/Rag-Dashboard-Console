@@ -14,7 +14,7 @@ const DashboardListItem: React.FC<DashboardListItemProps> = ({
 }) => {
   const PATH =
     mode === "dashboardList"
-      ? `/edit-dashboard/${item.dashboardId}?status=${item.dashboardStatus}`
+      ? `/edit-dashboard/${item.dashboardId}`
       : `/stats/${item.dashboardId}`;
 
   return (
@@ -43,7 +43,11 @@ const DashboardListItem: React.FC<DashboardListItemProps> = ({
         </th>
         <td className="border border-gray-300 px-4 py-2 cursor-pointer">
           <div className="flex justify-center">
-            <LinkButton path={PATH} type="icon">
+            <LinkButton
+              path={PATH}
+              type="icon"
+              state={{ status: item.dashboardStatus }}
+            >
               <img
                 src={mode === "dashboardList" ? edit : init}
                 alt={mode === "dashboardList" ? "수정 아이콘" : "입장 아이콘"}

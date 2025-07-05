@@ -1,3 +1,9 @@
+import {
+  DashboardDefaultInfo,
+  DashboardDetailInfo,
+  DatabaseColumn,
+} from "@/stores/dashboardStore";
+
 export interface DashBoardInfoProps {
   mode: "add" | "edit";
   dashboardId?: string;
@@ -16,11 +22,11 @@ export interface DashboardDefaultInfoItem {
   };
 }
 export interface DashboardDefaultInfoResponse {
-  dashboardDefaultInfo: {
-    dashboardName: string;
-    tableName: string;
-    dashboardDescription?: string;
-  };
+  createdAt: string;
+  updatedAt: string;
+  databaseColumnList: DatabaseColumn[];
+  dashboardDefaultInfo: DashboardDefaultInfo;
+  dashboardDetailInfo: DashboardDetailInfo;
 }
 export interface CreateDashboardResponse {
   dashboardId: string;

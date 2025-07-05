@@ -1,46 +1,39 @@
-import React, { useState } from "react";
+import React from "react";
+import { useDashboardStore } from "@/stores/dashboardStore";
 import DashboardGroupTable, { GroupItem } from "./DashboardGroupTable";
 
-const initialGroupData: GroupItem[] = [
-  {
-    id: 1,
-    databaseColumn: "user_gender",
-    databaseColumnAlias: "성별",
-    data: "gender",
-  },
-  {
-    id: 2,
-    databaseColumn: "user_age",
-    databaseColumnAlias: "나이",
-    data: "age",
-  },
-  {
-    id: 3,
-    databaseColumn: "purchase_amount",
-    databaseColumnAlias: "구매 금액",
-    data: "amount",
-  },
-];
-
 const DashboardDetailInfo: React.FC = () => {
-  const [groupData, setGroupData] = useState<GroupItem[]>(initialGroupData);
-
+  const { currentDashboard, groupItems, setGroupItems, getDatabaseColumnList } =
+    useDashboardStore();
+  console.log(getDatabaseColumnList());
   const handleGroupDataChange = (newGroupData: GroupItem[]): void => {
-    setGroupData(newGroupData);
+    setGroupItems(newGroupData);
     console.log("그룹 데이터 변경:", newGroupData);
   };
 
+  if (!currentDashboard) {
+    return <div>데이터를 불러오는 중...</div>;
+  }
+
   return (
     <>
-      <DashboardGroupTable
-        groupData={groupData}
-        onGroupDataChange={handleGroupDataChange}
-      />
+      <div className="mb-6">
+        <h3 className="text-xl font-semibold mb-4">대시보드 상세 정보</h3>
+      </div>
+
+      <div className="mb-6">
+        <h4 className="text-lg font-medium mb-4">그룹 설정</h4>
+        <DashboardGroupTable
+          groupData={groupItems}
+          onGroupDataChange={handleGroupDataChange}
+          getDatabaseColumnList={getDatabaseColumnList}
+        />
+      </div>
 
       <div className="mt-4 p-3 bg-gray-50 rounded text-sm text-gray-600">
         <p className="font-medium mb-2">현재 그룹 데이터:</p>
         <pre className="text-xs bg-white p-2 rounded border overflow-auto">
-          {JSON.stringify(groupData, null, 2)}
+          {JSON.stringify(groupItems, null, 2)}
         </pre>
       </div>
 

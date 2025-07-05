@@ -8,9 +8,10 @@ import {
 } from "@hello-pangea/dnd";
 import indexing from "@/assets/dashboard-info/index.svg";
 import trash from "@/assets/dashboard-info/trash.svg";
+import { DatabaseColumn } from "@/stores/dashboardStore";
 
 export interface GroupItem {
-  id: number;
+  groupId: number;
   databaseColumn: string;
   databaseColumnAlias: string;
   data: string;
@@ -19,21 +20,19 @@ export interface GroupItem {
 interface DashboardGroupTableProps {
   groupData: GroupItem[];
   onGroupDataChange: (groupData: GroupItem[]) => void;
+  getDatabaseColumnList: () => DatabaseColumn[];
 }
 
 const DashboardGroupTable: React.FC<DashboardGroupTableProps> = ({
   groupData,
   onGroupDataChange,
+  getDatabaseColumnList,
 }) => {
   const tableRef = useRef<HTMLTableElement>(null);
   const [showError, setShowError] = useState(false);
 
-  const databaseColumn = [
-    { name: "user_gender" },
-    { name: "user_age" },
-    { name: "purchase_amount" },
-    { name: "region" },
-  ];
+  const databaseColumn = getDatabaseColumnList();
+  console.log(databaseColumn.map((i) => i?.databaseColumn));
 
   const handleDragEnd = (result: DropResult) => {
     const { source, destination } = result;
@@ -59,10 +58,10 @@ const DashboardGroupTable: React.FC<DashboardGroupTableProps> = ({
 
     const newId =
       groupData.length > 0
-        ? Math.max(...groupData.map((item) => item.id)) + 1
+        ? Math.max(...groupData.map((item) => item.groupId)) + 1
         : 1;
     const newItem: GroupItem = {
-      id: newId,
+      groupId: newId,
       databaseColumn: "",
       databaseColumnAlias: "",
       data: "",
@@ -72,7 +71,7 @@ const DashboardGroupTable: React.FC<DashboardGroupTableProps> = ({
   };
 
   const handleDeleteItem = (id: number) => {
-    const newItems = groupData.filter((item) => item.id !== id);
+    const newItems = groupData.filter((item) => item.groupId !== id);
     onGroupDataChange(newItems);
   };
 
@@ -82,7 +81,7 @@ const DashboardGroupTable: React.FC<DashboardGroupTableProps> = ({
     value: string | number
   ) => {
     const newItems = groupData.map((item) =>
-      item.id === id ? { ...item, [field]: value } : item
+      item.groupId === id ? { ...item, [field]: value } : item
     );
     onGroupDataChange(newItems);
   };
@@ -140,12 +139,16 @@ const DashboardGroupTable: React.FC<DashboardGroupTableProps> = ({
             </thead>
             <Droppable droppableId="groupItems">
               {(provided) => (
-                <tbody ref={provided.innerRef} {...provided.droppableProps}>
+                <tbody
+                  className={groupData.length === 0 ? `h-[300px]` : ""}
+                  ref={provided.innerRef}
+                  {...provided.droppableProps}
+                >
                   {groupData.length === 0 ? (
-                    <tr>
+                    <tr className="min-h-[200px]">
                       <td
                         colSpan={5}
-                        className="text-center py-6 text-gray-500"
+                        className="text-center min-h-[200px] py-6 text-gray-500"
                       >
                         항목이 없습니다.{" "}
                         <span className="font-medium text-blue-600">
@@ -157,8 +160,8 @@ const DashboardGroupTable: React.FC<DashboardGroupTableProps> = ({
                   ) : (
                     groupData.map((item, index) => (
                       <Draggable
-                        key={item.id}
-                        draggableId={item.id.toString()}
+                        key={item.groupId}
+                        draggableId={item.groupId.toString()}
                         index={index}
                       >
                         {(provided, snapshot) => (
@@ -188,7 +191,7 @@ const DashboardGroupTable: React.FC<DashboardGroupTableProps> = ({
                                 value={item.databaseColumn}
                                 onChange={(e) =>
                                   handleItemChange(
-                                    item.id,
+                                    item.groupId,
                                     "databaseColumn",
                                     e.target.value
                                   )
@@ -196,8 +199,11 @@ const DashboardGroupTable: React.FC<DashboardGroupTableProps> = ({
                               >
                                 <option value="">컬럼 선택</option>
                                 {databaseColumn.map((col) => (
-                                  <option key={col.name} value={col.name}>
-                                    {col.name}
+                                  <option
+                                    key={col.databaseColumn}
+                                    value={col.databaseColumn}
+                                  >
+                                    {col.databaseColumn}
                                   </option>
                                 ))}
                               </select>
@@ -213,7 +219,7 @@ const DashboardGroupTable: React.FC<DashboardGroupTableProps> = ({
                                 value={item.databaseColumnAlias}
                                 onChange={(e) =>
                                   handleItemChange(
-                                    item.id,
+                                    item.groupId,
                                     "databaseColumnAlias",
                                     e.target.value
                                   )
@@ -231,7 +237,7 @@ const DashboardGroupTable: React.FC<DashboardGroupTableProps> = ({
                                 value={item.data}
                                 onChange={(e) =>
                                   handleItemChange(
-                                    item.id,
+                                    item.groupId,
                                     "data",
                                     e.target.value
                                   )
@@ -244,7 +250,7 @@ const DashboardGroupTable: React.FC<DashboardGroupTableProps> = ({
                             >
                               <button
                                 className="bg-red-500 text-white px-2 py-1 rounded cursor-pointer"
-                                onClick={() => handleDeleteItem(item.id)}
+                                onClick={() => handleDeleteItem(item.groupId)}
                               >
                                 <img src={trash} alt="삭제" />
                               </button>

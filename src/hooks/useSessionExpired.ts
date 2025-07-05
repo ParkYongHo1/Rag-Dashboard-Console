@@ -26,9 +26,7 @@ export const useSessionExpired = () => {
   return { handleSessionExpired };
 };
 
-// 전역 세션 만료 이벤트 처리
 export const setupGlobalSessionHandler = () => {
-  // 커스텀 이벤트 리스너 설정
   const handleSessionExpiredEvent = () => {
     const store = useCompanyStore.getState();
     store.logout();
@@ -38,13 +36,11 @@ export const setupGlobalSessionHandler = () => {
 
   window.addEventListener("session-expired", handleSessionExpiredEvent);
 
-  // 정리 함수 반환
   return () => {
     window.removeEventListener("session-expired", handleSessionExpiredEvent);
   };
 };
 
-// 세션 만료 이벤트 발생 함수
 export const triggerSessionExpired = () => {
   const event = new CustomEvent("session-expired");
   window.dispatchEvent(event);

@@ -1,3 +1,8 @@
+// components/dashboard-info/DashboardDefaultInfo.tsx
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { useMutation } from "@tanstack/react-query";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import back from "@/assets/dashboard-info/back.svg";
 import save from "@/assets/dashboard-info/save.svg";
 import { dashboardService } from "@/services/dashboard-list/api";
@@ -6,22 +11,22 @@ import {
   DashBoardDefaultInfoForm,
   DashBoardInfoProps,
 } from "@/types/dashboard-info";
-import DashboardDefaultInfoTitle from "@/widgets/dashboard-info/DashBoardDefaultInfoTitle";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { useForm } from "react-hook-form";
-import DashboardDefaultInfoForm from "./DashboardDefaultInfoForm";
-import { useEffect } from "react";
-import { QUERY_KEYS } from "@/constants/queryKeys";
+import { useDashboardStore } from "@/stores/dashboardStore";
 import { useCompanyStore } from "@/stores/companyStore";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import DashboardDefaultInfoTitle from "@/widgets/dashboard-info/DashBoardDefaultInfoTitle";
+import DashboardDefaultInfoForm from "./DashboardDefaultInfoForm";
 
-const DashboardDefaultInfo = ({ mode, dashboardId }: DashBoardInfoProps) => {
-  const { company } = useCompanyStore();
-  const tableNamesList = company?.tableNamesList || [];
+const DashboardDefaultInfo = ({ mode }: DashBoardInfoProps) => {
   const navigate = useNavigate();
-
   const [searchParams] = useSearchParams();
   const statusFromUrl = searchParams.get("status");
+
+  // Zustand store에서 데이터 가져오기
+  const { currentDashboard } = useDashboardStore();
+  const { company } = useCompanyStore();
+
+  // 테이블 이름 리스트 (기존 로직 유지 또는 store에서 가져오기)
+  const tableNamesList = company?.tableNamesList || [];
 
   const {
     register,
@@ -40,29 +45,17 @@ const DashboardDefaultInfo = ({ mode, dashboardId }: DashBoardInfoProps) => {
     },
   });
 
-  const { data: defaultValues } = useQuery({
-    queryKey: QUERY_KEYS.DASHBOARD.READ({
-      dashboardId: dashboardId!,
-      status: statusFromUrl ?? "",
-    }),
-    queryFn: () =>
-      dashboardService.getDashboardDefaultInfo({
-        dashboardId: dashboardId!,
-        status: statusFromUrl ?? "",
-      }),
-    enabled: mode === "edit" && Boolean(dashboardId),
-  });
-
+  // Zustand store의 데이터로 폼 초기화
   useEffect(() => {
-    if (defaultValues?.dashboardDefaultInfo) {
-      const info = defaultValues.dashboardDefaultInfo;
+    if (currentDashboard?.dashboardDefaultInfo) {
+      const info = currentDashboard.dashboardDefaultInfo;
       reset({
         dashboardName: info.dashboardName,
         tableName: info.tableName,
         dashboardDescription: info.dashboardDescription || "",
       });
     }
-  }, [defaultValues, reset]);
+  }, [currentDashboard, reset]);
 
   const { mutate, isPending } = useMutation({
     mutationFn: dashboardService.createDashboard,

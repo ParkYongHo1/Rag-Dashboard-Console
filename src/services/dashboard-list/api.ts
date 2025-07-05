@@ -34,7 +34,7 @@ export const dashboardService = {
     status: string;
   }) => {
     const response = await apiClient.get<DashboardDefaultInfoResponse>(
-      `${API_BASE_URL}/api/dashboard/${params.dashboardId}`,
+      `${API_BASE_URL}/api/dashboard`,
       { params }
     );
 

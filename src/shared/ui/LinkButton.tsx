@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { ReactNode } from "react";
+
 export const LinkButton = ({
   name,
   path,
@@ -7,6 +8,7 @@ export const LinkButton = ({
   isActive = false,
   onClick,
   children,
+  state,
 }: {
   name?: string;
   path: string;
@@ -14,6 +16,7 @@ export const LinkButton = ({
   isActive?: boolean;
   onClick?: () => void;
   children?: ReactNode;
+  state?: unknown;
 }) => {
   const typeStyles = {
     default: "flex items-center gap-2 cursor-pointer hover:text-gray-800",
@@ -22,12 +25,14 @@ export const LinkButton = ({
     icon: "flex items-center justify-center cursor-pointer",
     back: "flex items-center gap-1 bg-gray-200 shadow-md px-3 py-1.5 rounded-[5px] font-semibold cursor-pointer text-sm hover:bg-gray-300 transition duration-200",
   };
+
   const linkClasses = `
-   ${typeStyles[type]}
-   ${isActive ? "text-black font-medium" : "font-medium text-gray-400"}
+    ${typeStyles[type]}
+    ${isActive ? "text-black font-medium" : "font-medium text-gray-400"}
   `;
+
   return (
-    <Link to={path} className={linkClasses} onClick={onClick}>
+    <Link to={path} className={linkClasses} onClick={onClick} state={state}>
       {children ? children : <span>{name}</span>}
     </Link>
   );
