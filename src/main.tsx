@@ -23,10 +23,8 @@ const queryClient = new QueryClient({
 
 enableMocking().then(() => {
   ReactDOM.createRoot(document.getElementById("root")!).render(
-    <React.StrictMode>
-      <QueryClientProvider client={queryClient}>
-        <App />
-      </QueryClientProvider>
-    </React.StrictMode>
+    <QueryClientProvider client={queryClient}>
+      <App />
+    </QueryClientProvider>
   );
 });
