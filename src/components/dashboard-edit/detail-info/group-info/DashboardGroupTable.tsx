@@ -41,7 +41,13 @@ const DashboardGroupTable: React.FC<DashboardGroupTableProps> = ({
     const items = Array.from(groupData);
     const [reorderedItem] = items.splice(source.index, 1);
     items.splice(destination.index, 0, reorderedItem);
-    onGroupDataChange(items);
+
+    const reorderedItems = items.map((item, index) => ({
+      ...item,
+      groupId: index + 1,
+    }));
+
+    onGroupDataChange(reorderedItems);
   };
 
   const onAddItem = () => {
@@ -72,7 +78,11 @@ const DashboardGroupTable: React.FC<DashboardGroupTableProps> = ({
 
   const handleDeleteItem = (id: number) => {
     const newItems = groupData.filter((item) => item.groupId !== id);
-    onGroupDataChange(newItems);
+    const reorderedItems = newItems.map((item, index) => ({
+      ...item,
+      groupId: index + 1,
+    }));
+    onGroupDataChange(reorderedItems);
   };
 
   const handleItemChange = (

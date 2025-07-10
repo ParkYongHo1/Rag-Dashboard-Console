@@ -1,31 +1,23 @@
-// components/dashboard-info/DashboardDefaultInfo.tsx
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { useMutation } from "@tanstack/react-query";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
 import back from "@/assets/dashboard-info/back.svg";
 import save from "@/assets/dashboard-info/save.svg";
 import { dashboardService } from "@/services/dashboard-list/api";
 import { LinkButton } from "@/shared/ui/LinkButton";
-import {
-  DashBoardDefaultInfoForm,
-  DashBoardInfoProps,
-} from "@/types/dashboard-info";
+import { DashBoardDefaultInfoForm } from "@/types/dashboard-info";
 import { useDashboardStore } from "@/stores/dashboardStore";
 import { useCompanyStore } from "@/stores/companyStore";
 import DashboardDefaultInfoTitle from "@/widgets/dashboard-info/DashBoardDefaultInfoTitle";
 import DashboardDefaultInfoForm from "./DashboardDefaultInfoForm";
-
-const DashboardDefaultInfo = ({ mode }: DashBoardInfoProps) => {
+import { QUERY_KEYS } from "@/constants/queryKeys";
+const DashboardDefaultInfo = () => {
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-  const statusFromUrl = searchParams.get("status");
-
-  // Zustand store에서 데이터 가져오기
+  const queryClient = useQueryClient();
   const { currentDashboard } = useDashboardStore();
   const { company } = useCompanyStore();
 
-  // 테이블 이름 리스트 (기존 로직 유지 또는 store에서 가져오기)
   const tableNamesList = company?.tableNamesList || [];
 
   const {
@@ -45,7 +37,6 @@ const DashboardDefaultInfo = ({ mode }: DashBoardInfoProps) => {
     },
   });
 
-  // Zustand store의 데이터로 폼 초기화
   useEffect(() => {
     if (currentDashboard?.dashboardDefaultInfo) {
       const info = currentDashboard.dashboardDefaultInfo;
@@ -60,8 +51,11 @@ const DashboardDefaultInfo = ({ mode }: DashBoardInfoProps) => {
   const { mutate, isPending } = useMutation({
     mutationFn: dashboardService.createDashboard,
     onSuccess: () => {
-      navigate("/", { replace: true });
+      queryClient.invalidateQueries({
+        queryKey: QUERY_KEYS.DASHBOARD.LIST({ page: 1, size: 10 }),
+      });
       alert("대시보드가 생성되었습니다.");
+      navigate("/");
     },
     onError: (error) => {
       alert("요청 중 문제가 발생했습니다.");
@@ -80,14 +74,7 @@ const DashboardDefaultInfo = ({ mode }: DashBoardInfoProps) => {
   return (
     <>
       <div className="flex justify-between items-center mb-6">
-        <div className="text-2xl">
-          DASHBOARD {mode === "add" ? "생성" : "수정"}
-          {statusFromUrl && (
-            <span className="text-sm text-gray-500 ml-2">
-              ({statusFromUrl})
-            </span>
-          )}
-        </div>
+        <div className="text-2xl">DASHBOARD 생성</div>
         <div className="flex items-center gap-[10px]">
           <LinkButton path="/" type="back">
             <img
@@ -109,9 +96,8 @@ const DashboardDefaultInfo = ({ mode }: DashBoardInfoProps) => {
           </button>
         </div>
       </div>
-      <DashboardDefaultInfoTitle mode={mode} />
+      <DashboardDefaultInfoTitle mode="add" />
       <DashboardDefaultInfoForm
-        mode={mode}
         register={register}
         errors={errors}
         isValid={isValid}

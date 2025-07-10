@@ -1,20 +1,17 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-// 회사 정보 타입 정의
 export interface CompanyInfo {
   company: string;
   tableNamesList: string[];
 }
 
-// 토큰 타입 정의
 interface Tokens {
   accessToken: string;
   refreshToken: string;
   accessTokenExpiresAt: number;
 }
 
-// 스토어 상태 타입
 interface CompanyState {
   company: CompanyInfo | null;
   accessToken: string | null;
@@ -24,7 +21,6 @@ interface CompanyState {
   refreshTimer: NodeJS.Timeout | null;
   isRefreshing: boolean;
 
-  // 핵심 액션들
   login: (company: CompanyInfo, tokens: Tokens) => void;
   logout: () => void;
   updateAccessToken: (accessToken: string, expiresAt?: number) => void;
@@ -67,7 +63,6 @@ const refreshAccessToken = async () => {
       new Date(response.accessTokenExpiresAt)
     );
 
-    // 다음 갱신 스케줄 (중요: 새로운 만료시간 기준으로)
     store.scheduleTokenRefresh();
   } catch (error) {
     console.error("❌ 사전 토큰 갱신 실패:", error);

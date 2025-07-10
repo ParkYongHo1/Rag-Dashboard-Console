@@ -5,8 +5,8 @@ import {
 } from "@/stores/dashboardStore";
 
 export interface DashBoardInfoProps {
-  mode: "add" | "edit";
-  dashboardId?: string;
+  mode?: "add" | "edit";
+  dashboardId?: string | undefined;
 }
 
 export interface DashBoardDefaultInfoForm {
@@ -30,4 +30,24 @@ export interface DashboardDefaultInfoResponse {
 }
 export interface CreateDashboardResponse {
   dashboardId: string;
+}
+export interface DashboardEditRequest {
+  dashboardId: string;
+  dashboardDetailInfo: {
+    groupData: {
+      groupId: number;
+      databaseColumn: string;
+      databaseColumnAlias: string;
+      data: string;
+    }[];
+    aggregatedData: {
+      aggregatedId: number;
+      aggregatedDatabaseColumn: string;
+      dataType: string;
+      databaseColumnAlias: string;
+      dashboardCondition: string;
+      conditionValue: string;
+      statMethod: string;
+    }[];
+  };
 }

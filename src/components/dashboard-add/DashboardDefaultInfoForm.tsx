@@ -10,8 +10,8 @@ import {
   UseFormWatch,
   UseFormTrigger,
 } from "react-hook-form";
-import { DashboardFormErrors } from "./DashboardFormErrors";
 import { DashboardDefaultFormField } from "./DashboardDefaultInfoFormField";
+import { DashboardFormErrors } from "./DashboardFormErrors";
 
 interface Props extends DashBoardInfoProps {
   register: UseFormRegister<DashBoardDefaultInfoForm>;
@@ -25,7 +25,6 @@ interface Props extends DashBoardInfoProps {
 }
 
 const DashboardDefaultInfoForm = ({
-  mode,
   register,
   errors,
   onSubmit,
@@ -46,7 +45,7 @@ const DashboardDefaultInfoForm = ({
   return (
     <form onSubmit={onSubmit}>
       <DashboardDefaultFormField
-        mode={mode}
+        mode="add"
         register={register}
         tableNamesList={tableNamesList}
         selectedDatabase={selectedDatabase}

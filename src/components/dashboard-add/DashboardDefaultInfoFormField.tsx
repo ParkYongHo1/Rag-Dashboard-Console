@@ -44,14 +44,9 @@ export const DashboardDefaultFormField = ({
       }
 
       return (
-        <Input
-          register={register(name, {
-            required: `${label}은(는) 필수 선택입니다.`,
-          })}
-          error={undefined}
-          placeholder={`${label}을(를) 입력해주세요`}
-          disabled={true}
-        />
+        <>
+          <Input register={register(name)} error={undefined} disabled={true} />
+        </>
       );
     }
 

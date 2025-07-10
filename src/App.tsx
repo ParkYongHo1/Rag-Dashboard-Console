@@ -8,10 +8,11 @@ import {
 import { ReactNode, useEffect } from "react";
 import Header from "@/components/Header/Header";
 import DashboardListPage from "@/pages/dashboard-list/DashboardListPage";
-import DashboardInfoPage from "./pages/dashboard-info/DashboardInfoPage";
 import Footer from "@/components/Footer/Footer";
 import LoginPage from "@/pages/login/LoginPage";
 import { useCompanyStore } from "@/stores/companyStore";
+import DashboardEditPage from "./pages/dashboard-edit/DashboardEditPage";
+import DashboardAddPage from "./pages/dashboard-add/DashboardAddPage";
 
 interface LayoutWrapperProps {
   children: ReactNode;
@@ -85,7 +86,7 @@ function App() {
             path="/add-dashboard/"
             element={
               isAuthenticated ? (
-                <DashboardInfoPage mode="add" />
+                <DashboardAddPage />
               ) : (
                 <Navigate to="/login" replace />
               )
@@ -95,7 +96,7 @@ function App() {
             path="/edit-dashboard/:dashboardId"
             element={
               isAuthenticated ? (
-                <DashboardInfoPage mode="edit" />
+                <DashboardEditPage />
               ) : (
                 <Navigate to="/login" replace />
               )
