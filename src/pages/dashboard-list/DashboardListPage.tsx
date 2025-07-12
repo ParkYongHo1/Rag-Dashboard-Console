@@ -17,7 +17,6 @@ const DashboardListPage = () => {
     queryFn: () => dashboardService.getList({ page, size }),
     placeholderData: (previousData) => previousData,
   });
-  console.log(data);
 
   if (isLoading) return <p className="p-4">로딩 중...</p>;
   if (error || !data) return <p className="p-4">에러가 발생했어요 😢</p>;

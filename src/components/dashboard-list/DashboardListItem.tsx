@@ -12,14 +12,18 @@ const DashboardListItem: React.FC<DashboardListItemProps> = ({
   item,
   mode,
 }) => {
+  const base64Id = encodeURIComponent(item.dashboardId);
   const PATH =
     mode === "dashboardList"
-      ? `/edit-dashboard/${item.dashboardId}`
-      : `/stats/${item.dashboardId}`;
+      ? `/edit-dashboard/${base64Id}`
+      : `/stats/${base64Id}`;
 
   return (
     <>
       <tr>
+        <td className="border border-gray-300 px-4 py-2 truncate max-w-xs w-[320px]">
+          {item.dashboardId}
+        </td>
         <td className="border border-gray-300 px-4 py-2 truncate max-w-xs w-[320px]">
           {item.dashboardName}
         </td>

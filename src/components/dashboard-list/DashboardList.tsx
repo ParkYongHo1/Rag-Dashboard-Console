@@ -7,7 +7,6 @@ interface DashboardListComponentProps {
 }
 const DashboardList = ({ data }: DashboardListComponentProps) => {
   const [tooltipVisible, setTooltipVisible] = useState(false);
-  console.log(data);
 
   return (
     <>

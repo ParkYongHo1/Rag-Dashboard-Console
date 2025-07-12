@@ -32,12 +32,12 @@ const DashboardEditPage = () => {
 
   const { data: dashboardData, isLoading: queryLoading } = useQuery({
     queryKey: QUERY_KEYS.DASHBOARD.READ({
-      dashboardId: dashboardId!,
+      dashboardId: decodeURIComponent(dashboardId!),
       status: statusFromState ?? "",
     }),
     queryFn: () =>
       dashboardService.getDashboardDefaultInfo({
-        dashboardId: dashboardId!,
+        dashboardId: decodeURIComponent(dashboardId!),
         status: statusFromState ?? "",
       }),
     enabled: Boolean(dashboardId),
