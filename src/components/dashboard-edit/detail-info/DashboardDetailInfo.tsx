@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useDashboardStore } from "@/stores/dashboardStore";
 import { GroupItem, AggregatedData } from "@/stores/dashboardStore";
 import DashboardAggregatedTable from "./aggregated-info/DashboardAggregatedTable";
 import DashboardGroupTable from "./group-info/DashboardGroupTable";
+import { LoadingSpinner } from "@/shared/ui/LoadingSpinner";
 
 const DashboardDetailInfo: React.FC = () => {
   const {
@@ -13,6 +14,21 @@ const DashboardDetailInfo: React.FC = () => {
     setAggregatedItems,
     getDatabaseColumnList,
   } = useDashboardStore();
+
+  useEffect(() => {
+    if (currentDashboard?.dashboardDetailInfo) {
+      const { groupData, aggregatedData } =
+        currentDashboard.dashboardDetailInfo;
+
+      if (groupData && Array.isArray(groupData)) {
+        setGroupItems(groupData);
+      }
+
+      if (aggregatedData && Array.isArray(aggregatedData)) {
+        setAggregatedItems(aggregatedData);
+      }
+    }
+  }, [currentDashboard, setGroupItems, setAggregatedItems]);
 
   const handleGroupDataChange = (newGroupData: GroupItem[]): void => {
     setGroupItems(newGroupData);
@@ -25,7 +41,14 @@ const DashboardDetailInfo: React.FC = () => {
   };
 
   if (!currentDashboard) {
-    return <div>데이터를 불러오는 중...</div>;
+    return (
+      <LoadingSpinner
+        overlay={true}
+        size="lg"
+        color="blue"
+        text="대시보드 정보를 불러오는 중입니다..."
+      />
+    );
   }
 
   return (
