@@ -6,19 +6,19 @@ import {
   useNavigate,
 } from "react-router-dom";
 import { ReactNode, useEffect } from "react";
-import Header from "@/components/Header/Header";
+import Header from "@/components/common/Header/Header";
 import DashboardListPage from "@/pages/dashboard-list/DashboardListPage";
-import Footer from "@/components/Footer/Footer";
+import Footer from "@/components/common/Footer/Footer";
 import LoginPage from "@/pages/login/LoginPage";
 import { useCompanyStore } from "@/stores/companyStore";
 import DashboardEditPage from "./pages/dashboard-edit/DashboardEditPage";
 import DashboardAddPage from "./pages/dashboard-add/DashboardAddPage";
+import ErrorPage from "@/pages/common/ErrorPage";
 
 interface LayoutWrapperProps {
   children: ReactNode;
 }
 
-// 인증 상태 모니터링 컴포넌트
 const AuthMonitor = () => {
   const navigate = useNavigate();
   const isAuthenticated = useCompanyStore((state) => state.isAuthenticated);
@@ -26,7 +26,6 @@ const AuthMonitor = () => {
 
   useEffect(() => {
     if (!isAuthenticated || !accessToken) {
-      console.log("🚪 인증 상태 변경 감지 - 로그인 페이지로 이동");
       navigate("/login", { replace: true });
     }
   }, [isAuthenticated, accessToken, navigate]);
@@ -34,11 +33,20 @@ const AuthMonitor = () => {
   return null;
 };
 
-// 앱 컴포넌트
+const NotFoundPage = () => {
+  return (
+    <ErrorPage
+      title="페이지를 찾을 수 없습니다"
+      message="요청하신 페이지가 존재하지 않습니다."
+      showRetryButton={false}
+      showHomeButton={true}
+    />
+  );
+};
+
 function App() {
   const isAuthenticated = useCompanyStore((state) => state.isAuthenticated);
 
-  // 페이지 로드 시 세션 복원 확인
   useEffect(() => {
     const checkSession = () => {
       const store = useCompanyStore.getState();
@@ -48,9 +56,6 @@ function App() {
         const expiresAt = store.accessTokenExpiresAt;
 
         if (now >= expiresAt) {
-          console.warn(
-            "⚠️ 페이지 로드 시 토큰이 만료된 것을 확인 - 로그아웃 처리"
-          );
           store.logout();
           alert("세션이 만료되었습니다. 다시 로그인해주세요.");
           window.location.replace("/login");
@@ -102,10 +107,12 @@ function App() {
               )
             }
           />
-
+          <Route path="/404" element={<NotFoundPage />} />
           <Route
             path="*"
-            element={<Navigate to={isAuthenticated ? "/" : "/login"} replace />}
+            element={
+              <Navigate to={isAuthenticated ? "/404" : "/login"} replace />
+            }
           />
         </Routes>
       </LayoutWrapper>
@@ -115,13 +122,11 @@ function App() {
 
 const LayoutWrapper = ({ children }: LayoutWrapperProps) => {
   return (
-    <>
-      <main className="bg-gray-100">
-        <Header />
-        <div className="flex-1">{children}</div>
-        <Footer />
-      </main>
-    </>
+    <main className="bg-gray-100">
+      <Header />
+      <div className="flex-1">{children}</div>
+      <Footer />
+    </main>
   );
 };
 
