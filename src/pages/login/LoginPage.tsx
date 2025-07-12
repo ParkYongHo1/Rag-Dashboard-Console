@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useCompanyStore } from "@/stores/companyStore";
 import axios from "axios";
 import { authService } from "@/services/auth/api";
+import { LoadingSpinner } from "@/shared/ui/LoadingSpinner";
 
 interface FormData {
   companyId: string;
@@ -21,6 +22,7 @@ const LoginPage = () => {
     handleSubmit,
     formState: { errors, isValid },
     watch,
+    setValue,
   } = useForm<FormData>({
     mode: "onChange",
     defaultValues: {
@@ -47,8 +49,6 @@ const LoginPage = () => {
       login(companyInfo, tokens);
       console.log(response);
 
-      alert(response.message || "로그인에 성공했습니다.");
-
       navigate("/");
     },
     onError: (error) => {
@@ -70,6 +70,20 @@ const LoginPage = () => {
   const onSubmit = (data: FormData) => {
     mutate(data);
   };
+
+  const handleGuestLogin = () => {
+    setValue("companyId", "test_id");
+    mutate({ companyId: "test_id" });
+  };
+  if (isPending)
+    return (
+      <LoadingSpinner
+        overlay={true}
+        size="lg"
+        color="blue"
+        text="로그인중입니다...."
+      />
+    );
 
   return (
     <div className="min-h-[85vh] flex items-center bg-white justify-center px-4 relative">
@@ -122,14 +136,18 @@ const LoginPage = () => {
               }`}
               disabled={!isValid || isPending}
             >
-              {isPending ? "로그인 중..." : "로그인"}
+              로그인
             </button>
           </form>
 
-          <div className="flex items-center justify-center space-x-4 pt-4">
-            <div className="w-12 h-0.5 bg-gradient-to-r from-transparent to-gray-500/50"></div>
-            <div className="w-2 h-2 bg-gray-400/60 rounded-full"></div>
-            <div className="w-12 h-0.5 bg-gradient-to-l from-transparent to-gray-500/50"></div>
+          <div className="flex items-center justify-end space-x-4 pt-4 text-sm font-bold">
+            <button
+              onClick={handleGuestLogin}
+              disabled={isPending}
+              className="hover:underline cursor-pointer text-gray-400 hover:text-gray-500 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              게스트 계정으로 로그인
+            </button>
           </div>
         </div>
       </div>
