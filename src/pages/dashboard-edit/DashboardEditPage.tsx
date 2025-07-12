@@ -1,118 +1,21 @@
-import { useEffect } from "react";
-import { useLocation, useParams, useNavigate } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
-import { dashboardService } from "@/services/dashboard-list/api";
-import { QUERY_KEYS } from "@/constants/queryKeys";
-import { useDashboardStore } from "@/stores/dashboardStore";
 import { LoadingSpinner } from "@/shared/ui/LoadingSpinner";
 import back from "@/assets/dashboard-info/back.svg";
 import save from "@/assets/dashboard-info/save.svg";
+import trash from "@/assets/dashboard-info/trash.svg";
 import { LinkButton } from "@/shared/ui/LinkButton";
 import DashboardDetailInfo from "@/components/dashboard-edit/detail-info/DashboardDetailInfo";
-import { useMutation } from "@tanstack/react-query";
-import { DashboardEditRequest } from "@/types/dashboard-info";
-import { dashboardInfoService } from "@/services/dashboard-info/api";
 import DashboardDefaultInfo from "@/components/dashboard-edit/default-info/DashboardDefaultInfo";
+import { useDashboardEdit } from "@/hooks/useDashboardEdit";
 
 const DashboardEditPage = () => {
-  const { dashboardId } = useParams<{ dashboardId: string }>();
-  const location = useLocation();
-  const navigate = useNavigate();
-  const statusFromState = location.state?.status;
-
   const {
-    setCurrentDashboard,
-    clearCurrentDashboard,
-    setLoading,
-    currentDashboard,
     isLoading,
-    groupItems,
-    aggregatedItems,
-  } = useDashboardStore();
-
-  const { data: dashboardData, isLoading: queryLoading } = useQuery({
-    queryKey: QUERY_KEYS.DASHBOARD.READ({
-      dashboardId: decodeURIComponent(dashboardId!),
-      status: statusFromState ?? "",
-    }),
-    queryFn: () =>
-      dashboardService.getDashboardDefaultInfo({
-        dashboardId: decodeURIComponent(dashboardId!),
-        status: statusFromState ?? "",
-      }),
-    enabled: Boolean(dashboardId),
-  });
-
-  const { mutate, isPending } = useMutation({
-    mutationFn: (data: DashboardEditRequest) =>
-      dashboardInfoService.updateDashboard(data),
-    onSuccess: () => {
-      navigate("/", { replace: true });
-      alert("대시보드가 수정되었습니다.");
-    },
-    onError: (error) => {
-      alert("요청 중 문제가 발생했습니다.");
-      console.error(error);
-    },
-  });
-
-  useEffect(() => {
-    if (dashboardData) {
-      setCurrentDashboard(dashboardData);
-    }
-  }, [dashboardData, setCurrentDashboard]);
-
-  useEffect(() => {
-    setLoading(queryLoading);
-  }, [queryLoading, setLoading]);
-
-  useEffect(() => {
-    return () => {
-      clearCurrentDashboard();
-    };
-  }, [clearCurrentDashboard]);
-
-  const createDashboardDetailInfo = () => {
-    const groupData = groupItems.map((item) => ({
-      groupId: item.groupId,
-      databaseColumn: item.databaseColumn,
-      databaseColumnAlias: item.databaseColumnAlias,
-      data: item.data,
-    }));
-
-    const aggregatedData = aggregatedItems.map((item) => ({
-      aggregatedId: item.aggregatedId,
-      aggregatedDatabaseColumn: item.aggregatedDatabaseColumn,
-      dataType: item.dataType,
-      databaseColumnAlias: item.databaseColumnAlias,
-      dashboardCondition: item.dashboardCondition,
-      conditionValue: item.conditionValue,
-      statMethod: item.statMethod,
-    }));
-
-    return {
-      groupData,
-      aggregatedData,
-    };
-  };
-
-  const handleSave = () => {
-    console.log("=== 저장 버튼 클릭 ===");
-    console.log("현재 그룹 데이터:", groupItems);
-    console.log("현재 집계 데이터:", aggregatedItems);
-
-    const dashboardDetailInfo = createDashboardDetailInfo();
-
-    const requestData: DashboardEditRequest = {
-      dashboardId: dashboardId!,
-      dashboardDetailInfo,
-    };
-
-    console.log("=== 최종 API 요청 데이터 ===");
-    console.log(JSON.stringify(requestData, null, 2));
-
-    mutate(requestData);
-  };
+    currentDashboard,
+    isPending,
+    isAllFieldsFilled,
+    handleSave,
+    handleDelete,
+  } = useDashboardEdit();
 
   if (isLoading) {
     return (
@@ -124,28 +27,7 @@ const DashboardEditPage = () => {
       />
     );
   }
-  const isAllFieldsFilled = () => {
-    const isGroupDataValid = groupItems.every(
-      (item) =>
-        item.groupId &&
-        item.databaseColumn &&
-        item.databaseColumnAlias &&
-        item.data
-    );
 
-    const isAggregatedDataValid = aggregatedItems.every(
-      (item) =>
-        item.aggregatedId &&
-        item.aggregatedDatabaseColumn &&
-        item.dataType &&
-        item.databaseColumnAlias &&
-        item.dashboardCondition &&
-        item.conditionValue &&
-        item.statMethod
-    );
-
-    return isGroupDataValid && isAggregatedDataValid;
-  };
   return (
     <>
       <div className="m-auto w-full py-6">
@@ -175,6 +57,20 @@ const DashboardEditPage = () => {
                         className="w-[24px] h-[24px]"
                       />
                       <p>저장</p>
+                    </div>
+                  </button>
+                  <button
+                    onClick={handleDelete}
+                    disabled={isPending}
+                    className="text-white bg-red-500 shadow-md px-3 py-1.5 rounded-[5px] font-semibold cursor-pointer text-sm hover:bg-red-600 transition duration-200 disabled:bg-gray-400 disabled:cursor-not-allowed"
+                  >
+                    <div className="flex gap-[5px] justify-center items-center w-[60px]">
+                      <img
+                        src={trash}
+                        alt="삭제 아이콘"
+                        className="w-[24px] h-[24px]"
+                      />
+                      <p>삭제</p>
                     </div>
                   </button>
                 </div>

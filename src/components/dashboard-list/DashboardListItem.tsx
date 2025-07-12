@@ -2,6 +2,7 @@ import edit from "@/assets/dashboard-list/edit.svg";
 import init from "@/assets/dashboard-list/init.svg";
 import { LinkButton } from "@/shared/ui/LinkButton";
 import { DashboardItem } from "@/types/dashboard-list";
+import { formatDate } from "@/utils/dateFormatter";
 
 interface DashboardListItemProps {
   item: DashboardItem;
@@ -22,19 +23,16 @@ const DashboardListItem: React.FC<DashboardListItemProps> = ({
     <>
       <tr>
         <td className="border border-gray-300 px-4 py-2 truncate max-w-xs w-[320px]">
-          {item.dashboardId}
-        </td>
-        <td className="border border-gray-300 px-4 py-2 truncate max-w-xs w-[320px]">
           {item.dashboardName}
         </td>
         <td className="border border-gray-300 px-4 py-2 truncate max-w-xs w-[320px]">
           {item.dashboardDescription}
         </td>
         <td className="border border-gray-300 px-4 py-2  text-center truncate max-w-xs">
-          {item.createdAt}
+          {formatDate(item.createdAt)}
         </td>
         <td className="border border-gray-300 px-4 py-2  text-center truncate max-w-xs">
-          {item.updatedAt}
+          {formatDate(item.updatedAt)}
         </td>
         <th
           className={`border border-gray-300 px-4 py-2 text-center ${

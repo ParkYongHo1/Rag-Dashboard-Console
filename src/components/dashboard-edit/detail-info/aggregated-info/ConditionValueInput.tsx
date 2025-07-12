@@ -14,7 +14,6 @@ const ConditionValueInput: React.FC<ConditionValueInputProps> = ({
   item,
   onItemChange,
 }) => {
-  // 데이터 타입에 따라 값을 적절히 변환하는 함수
   const convertValue = (value: string, dataType: string): string | number => {
     if (dataType === "int" || dataType === "number") {
       const numValue = Number(value);
@@ -23,7 +22,6 @@ const ConditionValueInput: React.FC<ConditionValueInputProps> = ({
     return value;
   };
 
-  // 숫자 타입인지 확인하는 함수
   const isNumericType = (dataType: string): boolean => {
     return dataType === "int" || dataType === "number";
   };
@@ -34,20 +32,17 @@ const ConditionValueInput: React.FC<ConditionValueInputProps> = ({
     endValue: string
   ) => {
     if (isNumericType(item.dataType)) {
-      // 숫자 타입일 때: "숫자,숫자" 형태로 저장
       const startNum = convertValue(startValue, item.dataType);
       const endNum = convertValue(endValue, item.dataType);
       const combinedValue = `${startNum},${endNum}`;
       onItemChange(id, "conditionValue", combinedValue);
     } else {
-      // 문자열 타입일 때: "문자열,문자열" 형태로 저장
       const combinedValue = `${startValue},${endValue}`;
       onItemChange(id, "conditionValue", combinedValue);
     }
   };
 
   const getContainsValues = (conditionValue: string | number) => {
-    // conditionValue가 숫자일 경우 문자열로 변환
     const stringValue = String(conditionValue);
     const values = stringValue.split(",");
     return {
@@ -99,7 +94,7 @@ const ConditionValueInput: React.FC<ConditionValueInputProps> = ({
           ? "bg-gray-100 text-gray-400 cursor-not-allowed"
           : ""
       }`}
-      placeholder="조건 값"
+      placeholder={item.dashboardCondition === "없음" ? "없음" : "조건 값"}
       value={item.conditionValue}
       disabled={item.dashboardCondition === "없음"}
       onChange={(e) => {

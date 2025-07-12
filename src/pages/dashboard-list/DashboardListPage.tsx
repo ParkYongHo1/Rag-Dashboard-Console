@@ -1,25 +1,35 @@
-import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
-import { dashboardService } from "@/services/dashboard-list/api";
-import { QUERY_KEYS } from "@/constants/queryKeys";
 import { LinkButton } from "@/shared/ui/LinkButton";
-
 import Pagination from "@/components/dashboard-list/Pagination";
 import DashboardList from "@/components/dashboard-list/DashboardList";
 import NoDashboardListItem from "@/components/dashboard-list/NoDashboardListItem";
+import { LoadingSpinner } from "@/shared/ui/LoadingSpinner";
+
+import { useDashboardList } from "@/hooks/useDashboardList";
+import ErrorPage from "@/pages/common/ErrorPage";
 
 const DashboardListPage = () => {
-  const [page, setPage] = useState(1);
-  const size = 10;
+  const { data, isLoading, error, setPage, refetch } = useDashboardList(10);
 
-  const { data, isLoading, error } = useQuery({
-    queryKey: QUERY_KEYS.DASHBOARD.LIST({ page, size }),
-    queryFn: () => dashboardService.getList({ page, size }),
-    placeholderData: (previousData) => previousData,
-  });
+  if (isLoading)
+    return (
+      <LoadingSpinner
+        overlay={true}
+        size="lg"
+        color="blue"
+        text="대시보드 정보를 불러오는 중입니다..."
+      />
+    );
 
-  if (isLoading) return <p className="p-4">로딩 중...</p>;
-  if (error || !data) return <p className="p-4">에러가 발생했어요 😢</p>;
+  if (error || !data) {
+    return (
+      <ErrorPage
+        title="대시보드 목록을 불러올 수 없습니다"
+        message="대시보드 정보를 가져오는 중에 문제가 발생했습니다."
+        error={error}
+        onRetry={() => refetch()}
+      />
+    );
+  }
 
   return (
     <div className="m-auto w-full h-[90vh] py-6">
@@ -31,7 +41,6 @@ const DashboardListPage = () => {
                 <div className="text-2xl">DASHBOARD LIST</div>
                 <LinkButton name="+ New" path="/add-dashboard" type="button" />
               </div>
-
               {data.totalCount > 0 ? (
                 <DashboardList data={data} />
               ) : (
