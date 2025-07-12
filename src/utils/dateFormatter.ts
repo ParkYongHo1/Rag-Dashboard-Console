@@ -1,5 +1,5 @@
 export const formatDate = (dateString: string): string => {
-  const date = new Date(dateString);
+  const date = new Date(dateString + "Z");
 
   if (isNaN(date.getTime())) {
     return dateString;
