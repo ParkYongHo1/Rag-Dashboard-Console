@@ -1,4 +1,4 @@
-import DashboardDefaultInfo from "@/components/dashboard-add/DashboardDefaultInfo";
+import DashboardDefaultInfo from "@/components/dashboard/dashboard-add/DashboardDefaultInfo";
 
 const DashboardAddPage = () => {
   return (

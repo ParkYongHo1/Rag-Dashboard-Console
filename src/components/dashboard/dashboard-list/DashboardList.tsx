@@ -1,6 +1,6 @@
 import { useState } from "react";
 import DashboardListItem from "./DashboardListItem";
-import DashboardTooltip from "./DashboardTooltip";
+import DashboardTooltip from "../../../widgets/DashboardTooltip";
 import { DashboardListResponse } from "@/types/dashboard-list";
 interface DashboardListComponentProps {
   data: DashboardListResponse;
@@ -43,11 +43,7 @@ const DashboardList = ({ data }: DashboardListComponentProps) => {
           </thead>
           <tbody>
             {data.dashboardList.map((item) => (
-              <DashboardListItem
-                key={item.dashboardId}
-                item={item}
-                mode="dashboardList"
-              />
+              <DashboardListItem key={item.dashboardId} item={item} />
             ))}
           </tbody>
         </table>

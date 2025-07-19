@@ -29,7 +29,7 @@ const Header = () => {
                 />
                 <LinkButton
                   name="STATS"
-                  path="/stats"
+                  path="/stats-list"
                   type="default"
                   isActive={currentPath.startsWith("/stats")}
                 />

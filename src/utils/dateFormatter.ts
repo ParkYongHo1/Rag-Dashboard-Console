@@ -1,10 +1,13 @@
-export const formatDate = (dateString: string): string => {
-  const date = new Date(dateString + "Z");
+export const formatDate = (dateString: string | null | undefined): string => {
+  if (!dateString || dateString.trim() === "") {
+    return "-";
+  }
+
+  const dateWithZ = dateString.endsWith("Z") ? dateString : dateString + "Z";
+  const date = new Date(dateWithZ);
 
   if (isNaN(date.getTime())) {
     return dateString;
-  } else if (dateString === null) {
-    return "-";
   }
 
   const year = date.getFullYear();
@@ -12,7 +15,6 @@ export const formatDate = (dateString: string): string => {
   const day = String(date.getDate()).padStart(2, "0");
   const hours = String(date.getHours()).padStart(2, "0");
   const minutes = String(date.getMinutes()).padStart(2, "0");
-  const seconds = String(date.getSeconds()).padStart(2, "0");
 
-  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+  return `${year}-${month}-${day} ${hours}:${minutes}`;
 };

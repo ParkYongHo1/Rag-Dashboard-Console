@@ -7,13 +7,15 @@ import {
 } from "react-router-dom";
 import { ReactNode, useEffect } from "react";
 import Header from "@/components/common/Header/Header";
-import DashboardListPage from "@/pages/dashboard-list/DashboardListPage";
+import DashboardListPage from "@/pages/dashboard/dashboard-list/DashboardListPage";
 import Footer from "@/components/common/Footer/Footer";
 import LoginPage from "@/pages/login/LoginPage";
 import { useCompanyStore } from "@/stores/companyStore";
-import DashboardEditPage from "./pages/dashboard-edit/DashboardEditPage";
-import DashboardAddPage from "./pages/dashboard-add/DashboardAddPage";
+import DashboardEditPage from "./pages/dashboard/dashboard-edit/DashboardEditPage";
+import DashboardAddPage from "./pages/dashboard/dashboard-add/DashboardAddPage";
 import ErrorPage from "@/pages/common/ErrorPage";
+import StatsListPage from "@/pages/stats/stats-list/StatsListPage";
+import StatsPage from "@/pages/stats/stats/StatsPage";
 
 interface LayoutWrapperProps {
   children: ReactNode;
@@ -105,6 +107,22 @@ function App() {
               ) : (
                 <Navigate to="/login" replace />
               )
+            }
+          />
+          <Route
+            path="/stats-list"
+            element={
+              isAuthenticated ? (
+                <StatsListPage />
+              ) : (
+                <Navigate to="/login" replace />
+              )
+            }
+          />
+          <Route
+            path="/stats/:dashboardId"
+            element={
+              isAuthenticated ? <StatsPage /> : <Navigate to="/login" replace />
             }
           />
           <Route path="/404" element={<NotFoundPage />} />

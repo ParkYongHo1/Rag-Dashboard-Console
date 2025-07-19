@@ -1,13 +1,12 @@
-import { LinkButton } from "@/shared/ui/LinkButton";
-import Pagination from "@/components/dashboard-list/Pagination";
-import DashboardList from "@/components/dashboard-list/DashboardList";
-import NoDashboardListItem from "@/components/dashboard-list/NoDashboardListItem";
+import Pagination from "@/components/dashboard/dashboard-list/Pagination";
+import NoDashboardListItem from "@/widgets/NoDashboardListItem";
 import { LoadingSpinner } from "@/shared/ui/LoadingSpinner";
 
 import { useDashboardList } from "@/hooks/useDashboardList";
 import ErrorPage from "@/pages/common/ErrorPage";
+import StatsList from "@/components/stats/stats-list/StatsList";
 
-const DashboardListPage = () => {
+const StatsListPage = () => {
   const { data, isLoading, error, setPage, refetch } = useDashboardList(10);
 
   if (isLoading)
@@ -31,6 +30,16 @@ const DashboardListPage = () => {
     );
   }
 
+  const filteredDashboardList = data.dashboardList.filter(
+    (item) => item.dashboardStatus === "COMPLETED"
+  );
+
+  const filteredData = {
+    ...data,
+    dashboardList: filteredDashboardList,
+    totalCount: filteredDashboardList.length,
+  };
+
   return (
     <div className="m-auto w-full h-[90vh] py-6">
       <div className="flex flex-col gap-[20px]">
@@ -38,16 +47,20 @@ const DashboardListPage = () => {
           <div className="bg-white w-full border border-gray-300 rounded-[5px] py-6 px-[50px] min-h-[800px] max-h-[800px] flex flex-col justify-between">
             <div>
               <div className="flex justify-between items-center">
-                <div className="text-2xl">DASHBOARD LIST</div>
-                <LinkButton name="+ New" path="/add-dashboard" type="button" />
+                <div className="flex items-center gap-2 text-2xl">
+                  <span className="px-4 py-1 bg-green-100 text-green-700 rounded-full text-lg font-semibold border border-green-200">
+                    통계
+                  </span>
+                  <span className="text-gray-700">DASHBOARD</span>
+                </div>
               </div>
-              {data.totalCount > 0 ? (
-                <DashboardList data={data} />
+              {filteredData.dashboardList.length > 0 ? (
+                <StatsList filteredData={filteredData} />
               ) : (
                 <NoDashboardListItem />
               )}
             </div>
-            {data.totalPages > 0 && (
+            {filteredData.totalCount > 10 && (
               <Pagination
                 currentPage={data.currentPage}
                 totalPages={data.totalPages}
@@ -61,4 +74,4 @@ const DashboardListPage = () => {
   );
 };
 
-export default DashboardListPage;
+export default StatsListPage;

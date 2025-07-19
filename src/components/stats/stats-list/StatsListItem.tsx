@@ -1,4 +1,3 @@
-import edit from "@/assets/dashboard-list/edit.svg";
 import init from "@/assets/dashboard-list/init.svg";
 import { LinkButton } from "@/shared/ui/LinkButton";
 import { DashboardItem } from "@/types/dashboard-list";
@@ -6,18 +5,11 @@ import { formatDate } from "@/utils/dateFormatter";
 
 interface DashboardListItemProps {
   item: DashboardItem;
-  mode: "dashboardList" | "statList";
 }
 
-const DashboardListItem: React.FC<DashboardListItemProps> = ({
-  item,
-  mode,
-}) => {
+const StatsListItem: React.FC<DashboardListItemProps> = ({ item }) => {
   const base64Id = encodeURIComponent(item.dashboardId);
-  const PATH =
-    mode === "dashboardList"
-      ? `/edit-dashboard/${base64Id}`
-      : `/stats/${base64Id}`;
+  const PATH = `/stats/${base64Id}`;
 
   return (
     <>
@@ -35,11 +27,7 @@ const DashboardListItem: React.FC<DashboardListItemProps> = ({
           {formatDate(item.updatedAt)}
         </td>
         <th
-          className={`border border-gray-300 px-4 py-2 text-center ${
-            item.dashboardStatus === "COMPLETED"
-              ? "text-green-500"
-              : "text-red-500"
-          }`}
+          className={`border border-gray-300 px-4 py-2 text-center text-green-500`}
         >
           {item.dashboardStatus}
         </th>
@@ -51,8 +39,8 @@ const DashboardListItem: React.FC<DashboardListItemProps> = ({
               state={{ status: item.dashboardStatus }}
             >
               <img
-                src={mode === "dashboardList" ? edit : init}
-                alt={mode === "dashboardList" ? "수정 아이콘" : "입장 아이콘"}
+                src={init}
+                alt={"입장 아이콘"}
                 className="cursor-pointer w-[30px] h-[30px]"
               />
             </LinkButton>
@@ -63,4 +51,4 @@ const DashboardListItem: React.FC<DashboardListItemProps> = ({
   );
 };
 
-export default DashboardListItem;
+export default StatsListItem;

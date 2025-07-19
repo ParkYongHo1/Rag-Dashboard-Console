@@ -12,6 +12,7 @@ import { useCompanyStore } from "@/stores/companyStore";
 import DashboardDefaultInfoTitle from "@/widgets/dashboard-info/DashBoardDefaultInfoTitle";
 import DashboardDefaultInfoForm from "./DashboardDefaultInfoForm";
 import { QUERY_KEYS } from "@/constants/queryKeys";
+import { LoadingSpinner } from "@/shared/ui/LoadingSpinner";
 const DashboardDefaultInfo = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -70,7 +71,15 @@ const DashboardDefaultInfo = () => {
   const handleSave = () => {
     handleSubmit(onSubmit)();
   };
-
+  if (isPending)
+    return (
+      <LoadingSpinner
+        overlay={true}
+        size="lg"
+        color="blue"
+        text="대시보드 생성중입니다...."
+      />
+    );
   return (
     <>
       <div className="flex justify-between items-center mb-6">
