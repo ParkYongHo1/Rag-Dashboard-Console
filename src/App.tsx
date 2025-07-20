@@ -15,7 +15,7 @@ import DashboardEditPage from "./pages/dashboard/dashboard-edit/DashboardEditPag
 import DashboardAddPage from "./pages/dashboard/dashboard-add/DashboardAddPage";
 import ErrorPage from "@/pages/common/ErrorPage";
 import StatsListPage from "@/pages/stats/stats-list/StatsListPage";
-import StatsPage from "@/pages/stats/stats/StatsPage";
+import StatsItemPage from "@/pages/stats/stats-item/StatsItemPage";
 
 interface LayoutWrapperProps {
   children: ReactNode;
@@ -122,7 +122,11 @@ function App() {
           <Route
             path="/stats/:dashboardId"
             element={
-              isAuthenticated ? <StatsPage /> : <Navigate to="/login" replace />
+              isAuthenticated ? (
+                <StatsItemPage />
+              ) : (
+                <Navigate to="/login" replace />
+              )
             }
           />
           <Route path="/404" element={<NotFoundPage />} />

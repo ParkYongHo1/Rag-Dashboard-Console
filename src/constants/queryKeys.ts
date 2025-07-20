@@ -1,5 +1,4 @@
 export const QUERY_KEYS = {
-  TEST: ["test"] as const,
   DASHBOARD: {
     LIST: (params: { page: number; size: number }) =>
       ["DASHBOARD", "LIST", params] as const,
@@ -13,5 +12,10 @@ export const QUERY_KEYS = {
       ["DASHBOARD", "READ", params] as const,
 
     DETAIL: (id: string) => ["DASHBOARD", "DETAIL", id] as const,
+  },
+
+  STATISTICS: {
+    GET: (params: { dashboardId: string; startDate: Date; endDate: Date }) =>
+      ["STATISTICS", "GET", params] as const,
   },
 } as const;

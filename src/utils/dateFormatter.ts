@@ -1,13 +1,24 @@
-export const formatDate = (dateString: string | null | undefined): string => {
-  if (!dateString || dateString.trim() === "") {
+export const formatDate = (
+  dateString: string | null | undefined | Date
+): string => {
+  if (
+    !dateString ||
+    (typeof dateString === "string" && dateString.trim() === "")
+  ) {
     return "-";
   }
 
-  const dateWithZ = dateString.endsWith("Z") ? dateString : dateString + "Z";
-  const date = new Date(dateWithZ);
+  let date: Date;
+
+  if (dateString instanceof Date) {
+    date = dateString;
+  } else {
+    const dateWithZ = dateString.endsWith("Z") ? dateString : dateString + "Z";
+    date = new Date(dateWithZ);
+  }
 
   if (isNaN(date.getTime())) {
-    return dateString;
+    return typeof dateString === "string" ? dateString : "-";
   }
 
   const year = date.getFullYear();
