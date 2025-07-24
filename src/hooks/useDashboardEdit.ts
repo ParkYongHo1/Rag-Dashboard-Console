@@ -41,6 +41,12 @@ export const useDashboardEdit = () => {
       dashboardInfoService.updateDashboard(data),
     onSuccess: () => {
       queryClient.invalidateQueries({
+        queryKey: QUERY_KEYS.DASHBOARD.READ({
+          dashboardId: decodeURIComponent(dashboardId!),
+          status: statusFromState ?? "",
+        }),
+      });
+      queryClient.invalidateQueries({
         queryKey: QUERY_KEYS.DASHBOARD.LIST({ page: 1, size: 10 }),
       });
       alert("대시보드가 수정되었습니다.");

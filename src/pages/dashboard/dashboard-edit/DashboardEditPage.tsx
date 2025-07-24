@@ -4,8 +4,8 @@ import save from "@/assets/dashboard-info/save.svg";
 import trash from "@/assets/dashboard-info/trash.svg";
 import { LinkButton } from "@/shared/ui/LinkButton";
 import { useDashboardEdit } from "@/hooks/useDashboardEdit";
-import DashboardDefaultInfo from "@/components/dashboard/dashboard-add/DashboardDefaultInfo";
 import DashboardDetailInfo from "@/components/dashboard/dashboard-edit/detail-info/DashboardDetailInfo";
+import DashboardDefaultInfo from "@/components/dashboard/dashboard-edit/default-info/DashboardDefaultInfo";
 
 const DashboardEditPage = () => {
   const {

@@ -11,8 +11,8 @@ import DashboardListPage from "@/pages/dashboard/dashboard-list/DashboardListPag
 import Footer from "@/components/common/Footer/Footer";
 import LoginPage from "@/pages/login/LoginPage";
 import { useCompanyStore } from "@/stores/companyStore";
-import DashboardEditPage from "./pages/dashboard/dashboard-edit/DashboardEditPage";
-import DashboardAddPage from "./pages/dashboard/dashboard-add/DashboardAddPage";
+import DashboardEditPage from "@/pages/dashboard/dashboard-edit/DashboardEditPage";
+import DashboardAddPage from "@/pages/dashboard/dashboard-add/DashboardAddPage";
 import ErrorPage from "@/pages/common/ErrorPage";
 import StatsListPage from "@/pages/stats/stats-list/StatsListPage";
 import StatsItemPage from "@/pages/stats/stats-item/StatsItemPage";
