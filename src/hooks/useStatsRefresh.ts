@@ -25,15 +25,18 @@ export const useStatsRefresh = ({
   const [remainingTime, setRemainingTime] = useState(60);
   const queryClient = useQueryClient();
 
+  // selectGroupData는 빈 문자열로 설정 (StatsItemPage에서 관리)
   const { status, error, data } = useQuery({
     queryKey: QUERY_KEYS.STATISTICS.GET({
       dashboardId,
+      selectGroupData: "",
       startDate,
       endDate,
     }),
     queryFn: () =>
       statsService.getStatistics({
         dashboardId,
+        selectGroupData: "", // 기본값
         startDate,
         endDate,
       }),
@@ -61,12 +64,9 @@ export const useStatsRefresh = ({
     const start = Date.now();
 
     try {
+      // 모든 statistics 관련 쿼리를 새로고침
       await queryClient.refetchQueries({
-        queryKey: QUERY_KEYS.STATISTICS.GET({
-          dashboardId,
-          startDate,
-          endDate,
-        }),
+        queryKey: ["STATISTICS"],
       });
 
       const elapsed = Date.now() - start;

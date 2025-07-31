@@ -7,11 +7,19 @@ import { AutoRefresh } from "./AutoRefresh";
 import { useStatsRefresh } from "@/hooks/useStatsRefresh";
 import { useAutoRefreshTimer } from "@/hooks/useAutoRefreshTimer";
 
-const StatsHeader = () => {
+interface StatsHeaderProps {
+  startDate: Date;
+  endDate: Date;
+  onDateChange: (startDate: Date, endDate: Date) => void;
+}
+
+const StatsHeader = ({
+  startDate,
+  endDate,
+  onDateChange,
+}: StatsHeaderProps) => {
   const { dashboardId } = useParams<{ dashboardId: string }>();
   const [autoRefresh, setAutoRefresh] = useState(false);
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date());
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
 
   const { isRefreshing, refreshStats, remainingTime, setRemainingTime } =
@@ -40,6 +48,15 @@ const StatsHeader = () => {
     setRemainingTime,
   });
 
+  // DateSelector에서 사용할 날짜 변경 핸들러
+  const handleStartDateChange = (newStartDate: Date) => {
+    onDateChange(newStartDate, endDate);
+  };
+
+  const handleEndDateChange = (newEndDate: Date) => {
+    onDateChange(startDate, newEndDate);
+  };
+
   return (
     <div className="flex justify-between items-center py-4 shadow-md px-6 mb-[20px] border border-gray-200 rounded-[5px]">
       <div className="flex flex-col gap-[5px]">
@@ -65,9 +82,9 @@ const StatsHeader = () => {
         />
         <DateSelector
           startDate={startDate}
-          setStartDate={setStartDate}
+          setStartDate={handleStartDateChange}
           endDate={endDate}
-          setEndDate={setEndDate}
+          setEndDate={handleEndDateChange}
           isCalendarOpen={isCalendarOpen}
           setIsCalendarOpen={setIsCalendarOpen}
         />

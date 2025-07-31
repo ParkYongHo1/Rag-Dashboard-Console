@@ -15,7 +15,11 @@ export const QUERY_KEYS = {
   },
 
   STATISTICS: {
-    GET: (params: { dashboardId: string; startDate: Date; endDate: Date }) =>
-      ["STATISTICS", "GET", params] as const,
+    GET: (params: {
+      dashboardId: string;
+      selectGroupData: string;
+      startDate: Date;
+      endDate: Date;
+    }) => ["STATISTICS", "GET", params] as const,
   },
 } as const;

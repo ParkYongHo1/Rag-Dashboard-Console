@@ -6,9 +6,9 @@ import "react-datepicker/dist/react-datepicker.css";
 
 interface dateSelectorProps {
   startDate: Date;
-  setStartDate: React.Dispatch<React.SetStateAction<Date>>;
+  setStartDate: (date: Date) => void; // 함수형으로 변경
   endDate: Date;
-  setEndDate: React.Dispatch<React.SetStateAction<Date>>;
+  setEndDate: (date: Date) => void; // 함수형으로 변경
   isCalendarOpen: boolean;
   setIsCalendarOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }

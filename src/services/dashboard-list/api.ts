@@ -12,7 +12,6 @@ export const dashboardService = {
       `${API_BASE_URL}/api/dashboards`,
       { params }
     );
-    console.log(response.data);
 
     return response.data;
   },
@@ -21,8 +20,6 @@ export const dashboardService = {
     tableName: string;
     dashboardDescription?: string;
   }) => {
-    console.log(params);
-
     const response = await apiClient.post<CreateDashboardResponse>(
       `${API_BASE_URL}/api/dashboard`,
       params

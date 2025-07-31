@@ -14,3 +14,16 @@ export const METHOD = [
   { value: "합계", label: "합계 (SUM)" },
   { value: "평균", label: "평균 (AVG)" },
 ];
+
+export const COLORS = [
+  "#0088FE",
+  "#00C49F",
+  "#FFBB28",
+  "#FF8042",
+  "#8884D8",
+  "#82CA9D",
+  "#FFC658",
+  "#FF7C7C",
+  "#8DD1E1",
+  "#D084D0",
+];
